@@ -1,0 +1,1297 @@
+[
+  {
+    "name": "主体主档",
+    "children": [
+      {
+        "name": "人员主档",
+        "tables": [
+          {
+            "cn": "国家平台共享池-人员基本信息-推送xj",
+            "en": "gab_gxc_ryjbxx_ws_tsxj_lhcz_ai_model_test"
+          },
+          {
+            "cn": "人员基本信息（常住人口基本信息）",
+            "en": "ysk_01025_ryjbxx_001_lhcz_ai_model_test"
+          },
+          {
+            "cn": "全国常住人口主表|全国常住人口",
+            "en": "ywk_sc_ztk_sjzh_czrkzh_2001_lhcz_ai_model_test"
+          },
+          {
+            "cn": "常住人口基本信息整合",
+            "en": "ywk_sc_czrkjbxx_zhenghe_new_2001_lhcz_ai_model_test"
+          },
+          {
+            "cn": "常口和内地整合数据",
+            "en": "ywk_sc_ztk_ldrk_ckrkzh_2001_lhcz_ai_model_test"
+          },
+          {
+            "cn": "常口非汉族人库",
+            "en": "ywk_sc_dsr_fhz_2001_lhcz_ai_model_test"
+          },
+          {
+            "cn": "云南常住人口整合",
+            "en": "ywk_sc_czrkjbxx_zhenghe_2001_lhcz_ai_model_test"
+          }
+        ]
+      },
+      {
+        "name": "流动人口",
+        "tables": [
+          {
+            "cn": "流动人口信息",
+            "en": "nb_tab_jz_ldrkxx_lhcz_ai_model_test"
+          },
+          {
+            "cn": "警综_流动人口信息",
+            "en": "ysk_01003_jzldrkxx_001_lhcz_ai_model_test"
+          }
+        ]
+      },
+      {
+        "name": "地址与住址",
+        "tables": [
+          {
+            "cn": "警综_标准住址信息",
+            "en": "ysk_99000_zzxx_001_lhcz_ai_model_test"
+          },
+          {
+            "cn": "人员地址库(郑川)",
+            "en": "ztk_mxgl_rydzxx_lhcz_ai_model_test"
+          }
+        ]
+      },
+      {
+        "name": "证件与照片",
+        "tables": [
+          {
+            "cn": "警综_人员证件信息",
+            "en": "nb_tab_jzryzjxx_lhcz_ai_model_test"
+          },
+          {
+            "cn": "最新二代证照片url",
+            "en": "ywk_sc_dsr_edz_url_df_2001_lhcz_ai_model_test"
+          },
+          {
+            "cn": "新疆常口和内地常口照片整合",
+            "en": "ywk_sfzh_zplj_all_for_fws_2001_lhcz_ai_model_test"
+          }
+        ]
+      },
+      {
+        "name": "教育与职业",
+        "tables": [
+          {
+            "cn": "学生信息表",
+            "en": "lhcz_wx_tmp_ztk_students_lhcz_ai_model_test"
+          },
+          {
+            "cn": "人员职业库",
+            "en": "lhcz_wx_jcmx_ryzyk_history_lhcz_ai_model_test"
+          },
+          {
+            "cn": "职业库信息",
+            "en": "lhcz_wx_jcmx_zhiye_zhenghe_lhcz_ai_model_test"
+          }
+        ]
+      },
+      {
+        "name": "车辆主档",
+        "tables": [
+          {
+            "cn": "交警_交警机动车基本信息",
+            "en": "nb_tab_jj_jjjdcjbxx_lhcz_ai_model_test"
+          },
+          {
+            "cn": "交警_交警驾驶人基本信息",
+            "en": "nb_tab_jj_jjjsrjbxx_lhcz_ai_model_test"
+          },
+          {
+            "cn": "交警总队_机动车基本信息",
+            "en": "ysk_01017_jdcjbxx_001_lhcz_ai_model_test"
+          },
+          {
+            "cn": "电动自行车登记信息表",
+            "en": "ysk_01017_ddzxcdjxxb_001_lhcz_ai_model_test"
+          },
+          {
+            "cn": "交警总队_电动自行车登记信息表",
+            "en": "ysk_01017_jjzdddzxcdjxxb_001_lhcz_ai_model_test"
+          },
+          {
+            "cn": "每个车牌最后一条记录|机动车车牌最新一条记录",
+            "en": "ywk_sc_lh_last_jdcjbxx_new_esc_2001_lhcz_ai_model_test"
+          }
+        ]
+      },
+      {
+        "name": "场所与机构",
+        "tables": [
+          {
+            "cn": "房屋信息",
+            "en": "ysk_01003_fwxx_001_lhcz_ai_model_test"
+          },
+          {
+            "cn": "机构基本信息（类似工商登记数据）",
+            "en": "ysk_01003_jgjbxx_001_lhcz_ai_model_test"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "关系扩圈",
+    "children": [
+      {
+        "name": "婚姻关系",
+        "tables": [
+          {
+            "cn": "婚姻证件整合表",
+            "en": "hydjxx_zhenghe_final_lhcz_ai_model_test"
+          },
+          {
+            "cn": "婚姻登记信息(清洗后)",
+            "en": "ywk_sc_hydjsj_result_2001_lhcz_ai_model_test"
+          },
+          {
+            "cn": "户籍婚姻关系整合专题库（含历史户籍）",
+            "en": "ywk_sc_ztk_huji_hunyin_zhenghe_guanxi_2001_lhcz_ai_model_test"
+          }
+        ]
+      },
+      {
+        "name": "亲属关系",
+        "tables": [
+          {
+            "cn": "父母子女关系整合",
+            "en": "lhcz_lyl_mxz_conse_0608_zlfm_zh_lhcz_ai_model_test"
+          },
+          {
+            "cn": "基础模型_常口关系之直系亲属",
+            "en": "ywk_sc_czrkgx_zxqs_result_2001_lhcz_ai_model_test"
+          }
+        ]
+      },
+      {
+        "name": "家族关系",
+        "tables": [
+          {
+            "cn": "历史家族人员信息",
+            "en": "mxgl_yw_lsjzryxx_0921_lhcz_ai_model_test"
+          },
+          {
+            "cn": "现家族人员信息",
+            "en": "mxgl_yw_xjzryxx_0921_lhcz_ai_model_test"
+          },
+          {
+            "cn": "户号下历史家族关系",
+            "en": "ywk_sc_ztk_lsjzgx_hhfx_jg_2001_lhcz_ai_model_test"
+          }
+        ]
+      },
+      {
+        "name": "家族图谱",
+        "tables": [
+          {
+            "cn": "基于图算法做的家族关系_第四版",
+            "en": "ywk_sc_dsr_ztk_jzgx_2001_lhcz_ai_model_test"
+          },
+          {
+            "cn": "基于图算法做的家族关系_第五版",
+            "en": "ywk_sc_dsr_ztk_jzgx_chonggou_final_result_2001_lhcz_ai_model_test"
+          }
+        ]
+      },
+      {
+        "name": "摸排关系",
+        "tables": [
+          {
+            "cn": "关系人库",
+            "en": "ywk_sc_gxrk_all_2001_lhcz_ai_model_test"
+          },
+          {
+            "cn": "关系人信息（公安摸底关系人）",
+            "en": "ysk_01006_gxrxx_001_lhcz_ai_model_test"
+          },
+          {
+            "cn": "认识人员关系表",
+            "en": "lhcz_ghm_rjgx_ycyb_results_1_lhcz_ai_model_test"
+          }
+        ]
+      },
+      {
+        "name": "人车关联",
+        "tables": [
+          {
+            "cn": "人车关联库（cnt值最大则为可能性最高人车关联）",
+            "en": "lhcz_ghm_tmp_rck_results_07_lhcz_ai_model_test"
+          },
+          {
+            "cn": "人车整合表（1.各地站级安检系统自行选择关联模型进行人车关联运算，数据结果同步至该数据。2.边检检查站通话边境人车数据进行关联得出人车关联结果。3.人车证数据自行产生的人车关联结果。4.将三部分人车关联数据进行整合）",
+            "en": "ysk_01003_rczhb_001_lhcz_ai_model_test"
+          },
+          {
+            "cn": "身份证号车牌号对应关系",
+            "en": "lhcz_lyl_ljd_chelianggj_sfzh_cph_zh_02_lhcz_ai_model_test"
+          }
+        ]
+      },
+      {
+        "name": "人号/证件设备关联",
+        "tables": [
+          {
+            "cn": "人号关联表（身份证+手机号）|人号整合表（机器学习预测结果）",
+            "en": "lhcz_wx_sjh_rylshmk_pca_result_lhcz_ai_model_test"
+          },
+          {
+            "cn": "LBS数据_证件UUID关联结果表(高价值)",
+            "en": "cardno_lbsuuid_relate_result_highvalue_lhcz_ai_model_test"
+          }
+        ]
+      },
+      {
+        "name": "同行同住",
+        "tables": [
+          {
+            "cn": "同行关系数据_日增量",
+            "en": "nb_app_txgx_lhcz_ai_model_test"
+          },
+          {
+            "cn": "同行同住（45版）",
+            "en": "ywk_sc_txtzgxzh45b_20_lhcz_ai_model_test"
+          },
+          {
+            "cn": "同行同住（34版）",
+            "en": "ywk_sc_txtzgxzh_20_lhcz_ai_model_test"
+          },
+          {
+            "cn": "同行同住（23版）",
+            "en": "ywk_sc_txtzmxzhesb_20_lhcz_ai_model_test"
+          },
+          {
+            "cn": "旅店同住基础数据",
+            "en": "ztk_check_inout_hotel_lhcz_ai_model_test"
+          }
+        ]
+      },
+      {
+        "name": "共现关系",
+        "tables": [
+          {
+            "cn": "同WIFI链接",
+            "en": "lhcz_ghm_twifi_sfzh_results_lhcz_ai_model_test"
+          },
+          {
+            "cn": "非汉族之间同加油",
+            "en": "lhcz_ghm_rjgx_tjy_ycyb_lhcz_ai_model_test"
+          },
+          {
+            "cn": "非汉族之间同暂住地",
+            "en": "lhcz_ghm_rjgx_tzd_ycyb_lhcz_ai_model_test"
+          },
+          {
+            "cn": "同时期_同校同专业同年级同班级学生",
+            "en": "lhcz_wx_ztk_xsgx_tsq_txtzytjtb_lhcz_ai_model_test"
+          },
+          {
+            "cn": "非汉族之间同违章销分",
+            "en": "lhcz_ghm_rjgx_wzxf_ycyb_lhcz_ai_model_test"
+          },
+          {
+            "cn": "基础模型_设备同行",
+            "en": "lhcz_qy_sk_geohash_sbtx_cardno_result_lhcz_ai_model_test"
+          },
+          {
+            "cn": "非汉族之间同地感",
+            "en": "lhcz_ghm_rjgx_tdg_ycyb_lhcz_ai_model_test"
+          },
+          {
+            "cn": "同加油",
+            "en": "lhcz_ghm_rjgx_tjy_ycyb_new_lhcz_ai_model_test"
+          }
+        ]
+      },
+      {
+        "name": "圈层与预测",
+        "tables": [
+          {
+            "cn": "二圈",
+            "en": "ywk_sc_siquan_luoxian_ong_jilu_final_df_2001_lhcz_ai_model_test"
+          },
+          {
+            "cn": "三圈（人员关系）",
+            "en": "ywk_sc_xxx_ztk_di_san_quan_ry_2001_lhcz_ai_model_test"
+          },
+          {
+            "cn": "四圈（人员关系）",
+            "en": "ywk_sc_di_si_quan_ry_hui_zong_final_df_2001_lhcz_ai_model_test"
+          },
+          {
+            "cn": "二三四圈整合",
+            "en": "mxgl_yw_20230912_234quan_zh_qc_cl_lhcz_ai_model_test"
+          },
+          {
+            "cn": "非汉族人员-非汉族人员相识预测结果表",
+            "en": "lhcz_ghm_rjgx_ycyb_results_lhcz_ai_model_test"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "时空轨迹",
+    "children": [
+      {
+        "name": "身份轨迹",
+        "tables": [
+          {
+            "cn": "身份证轨迹整合",
+            "en": "ywk_sc_sj_gjzh_new_1_dd_2001_lhcz_ai_model_test"
+          },
+          {
+            "cn": "最新一条身份轨迹整合表|最后一条轨迹数据（只有身份轨迹）",
+            "en": "ywk_sc_latest_trace_sx_2001_lhcz_ai_model_test"
+          },
+          {
+            "cn": "最新一条身份轨迹整合表|最后一条轨迹数据（身份轨迹+人证）",
+            "en": "ywk_sc_latest_trace_2001_lhcz_ai_model_test"
+          },
+          {
+            "cn": "所有身份证最后活动轨迹（身份轨迹+人证+人像）",
+            "en": "ywk_sc_xcl_zui_hou_gui_ji_final_2001_lhcz_ai_model_test"
+          },
+          {
+            "cn": "身份证轨迹实时整合",
+            "en": "ywk_sc_sj_gjzh_new_1_dd_ss_2001_lhcz_ai_model_test"
+          }
+        ]
+      },
+      {
+        "name": "车辆轨迹",
+        "tables": [
+          {
+            "cn": "车辆轨迹数据整合",
+            "en": "ywk_sc_sj_ztk_clgjzh_dd_2001_lhcz_ai_model_test"
+          }
+        ]
+      },
+      {
+        "name": "地感轨迹",
+        "tables": [
+          {
+            "cn": "地感车辆轨迹整合",
+            "en": "ywk_sc_dgz_cl_zh_2001_lhcz_ai_model_test"
+          },
+          {
+            "cn": "地感人员轨迹整合",
+            "en": "ywk_sc_dgz_dg_ry_zh_new_2001_lhcz_ai_model_test"
+          },
+          {
+            "cn": "地感模型历史表",
+            "en": "ywk_sc_htdg_gj_final_hs_2001_lhcz_ai_model_test"
+          },
+          {
+            "cn": "地感身份轨迹整合（实时）",
+            "en": "ywk_sc_dgz_dg_ry_zh_ss_new_2001_lhcz_ai_model_test"
+          },
+          {
+            "cn": "霍尔果斯地感点位",
+            "en": "lhcz_zyp_hegs_dgdw_lhcz_ai_model_test"
+          }
+        ]
+      },
+      {
+        "name": "LBS轨迹",
+        "tables": [
+          {
+            "cn": "LBS数据_POI定位",
+            "en": "scene_lhcz_ai_model_test"
+          },
+          {
+            "cn": "LBS数据_定时定位",
+            "en": "trail_lage_lhcz_ai_model_test"
+          },
+          {
+            "cn": "六合一轨迹数据（LBS六张表整合）",
+            "en": "uuid_trace_info_lhcz_ai_model_test"
+          },
+          {
+            "cn": "LBS数据_注册定位",
+            "en": "register_lhcz_ai_model_test"
+          },
+          {
+            "cn": "LBS数据_基站连接信息",
+            "en": "cell_stable_lhcz_ai_model_test"
+          }
+        ]
+      },
+      {
+        "name": "SDK轨迹",
+        "tables": [
+          {
+            "cn": "SDK数据_设备轨迹记录表",
+            "en": "ysk_01012_sbgjjlb_trans_001_lhcz_ai_model_test"
+          }
+        ]
+      },
+      {
+        "name": "检查站/安检轨迹",
+        "tables": [
+          {
+            "cn": "联创_人员整合表（检查站）",
+            "en": "ysk_01003_lcryzhb_001_lhcz_ai_model_test"
+          },
+          {
+            "cn": "联创_车辆整合表（检查站）",
+            "en": "ysk_01017_lcclzhb_001_lhcz_ai_model_test"
+          },
+          {
+            "cn": "机场安检数据",
+            "en": "ysk_01015_jcajsj_002_lhcz_ai_model_test"
+          },
+          {
+            "cn": "一机一档",
+            "en": "ysk_01003_yjyd_001_lhcz_ai_model_test"
+          }
+        ]
+      },
+      {
+        "name": "同行轨迹",
+        "tables": [
+          {
+            "cn": "铁路同行基础数据",
+            "en": "dws_ztk_train_trace_lhcz_ai_model_test"
+          },
+          {
+            "cn": "民航同行基础数据",
+            "en": "dws_ztk_airplane_trace_lhcz_ai_model_test"
+          },
+          {
+            "cn": "客运同行基础数据",
+            "en": "dws_ztk_coach_trace_lhcz_ai_model_test"
+          }
+        ]
+      },
+      {
+        "name": "落脚点分析",
+        "tables": [
+          {
+            "cn": "落脚点分析模型-人员",
+            "en": "ywk_ywsck_ryhdglsj_001_lhcz_ai_model_test"
+          },
+          {
+            "cn": "落脚点分析模型-车辆",
+            "en": "ywk_ywsck_clhdglsj_001_lhcz_ai_model_test"
+          }
+        ]
+      },
+      {
+        "name": "出入疆轨迹",
+        "tables": [
+          {
+            "cn": "公路出疆",
+            "en": "lhcz_zyp_glcjrj_result_lhcz_ai_model_test"
+          },
+          {
+            "cn": "中途下车汇总表",
+            "en": "lhcz_ghm_ztxc_results_lhcz_ai_model_test"
+          },
+          {
+            "cn": "环疆出入人员",
+            "en": "ywk_sc_hjjcz_person_dd_2001_lhcz_ai_model_test"
+          },
+          {
+            "cn": "整合身份出疆、设备出疆、通过轨迹判断人员出疆等数据",
+            "en": "mxgl_yw_rujiang_chujiang_20250217_lhcz_ai_model_test"
+          },
+          {
+            "cn": "常口_内地入疆_模型历史数据",
+            "en": "ztk_ndrlj_drbcxytsry_zh_mxj_no_lhcz_ai_model_test"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "设备感知与网安",
+    "children": [
+      {
+        "name": "手机号开户",
+        "tables": [
+          {
+            "cn": "开户整合",
+            "en": "ztk_consequce_galsj_khzl_lhcz_ai_model_test"
+          }
+        ]
+      },
+      {
+        "name": "WiFi与设备连接",
+        "tables": [
+          {
+            "cn": "LBS数据_WIFI连接信息",
+            "en": "wifi_connection_lhcz_ai_model_test"
+          },
+          {
+            "cn": "LBS数据_WIFI扫描信息",
+            "en": "wifi_stable_lhcz_ai_model_test"
+          },
+          {
+            "cn": "SDK数据_设备WiFi信息表",
+            "en": "ysk_01003_sbwifixxb_trans_001_lhcz_ai_model_test"
+          },
+          {
+            "cn": "SDK数据_设备码值信息表",
+            "en": "ysk_01012_sbmzxxb_trans_001_lhcz_ai_model_test"
+          }
+        ]
+      },
+      {
+        "name": "设备画像与APP",
+        "tables": [
+          {
+            "cn": "SDK数据_设备画像信息",
+            "en": "ysk_01003_sbhxxx_trans_001_lhcz_ai_model_test"
+          },
+          {
+            "cn": "SDK数据_关注设备APP列表",
+            "en": "ysk_01003_gzsbapplb_trans_001_lhcz_ai_model_test"
+          }
+        ]
+      },
+      {
+        "name": "通联",
+        "tables": [
+          {
+            "cn": "913断非法通联_可疑维度分析",
+            "en": "lhcz_qy_913dfftl_kywdfx_result_lhcz_ai_model_test"
+          },
+          {
+            "cn": "境内外通联",
+            "en": "ysk_01003_jnwtl_001_lhcz_ai_model_test"
+          }
+        ]
+      },
+      {
+        "name": "人脸与卡口",
+        "tables": [
+          {
+            "cn": "卡口_人证合一信息(新疆)",
+            "en": "nb_tab_kkrzhyxx_lhcz_ai_model_test"
+          },
+          {
+            "cn": "高准确率感知人像数据",
+            "en": "lhcz_ghm_dgxf_results_zhenghe_lhcz_ai_model_test"
+          },
+          {
+            "cn": "九大场景归一人员数据",
+            "en": "nb_tab_jdcjgyrysj_lhcz_ai_model_test"
+          },
+          {
+            "cn": "九大场景人脸实名聚档数据",
+            "en": "lhcz_lyl_hkjd_jdcj_fwsyjsj_lhcz_ai_model_test"
+          },
+          {
+            "cn": "海康_动态人脸_生产环境",
+            "en": "nb_tab_hkdtrl_schj_lhcz_ai_model_test"
+          }
+        ]
+      },
+      {
+        "name": "小区门禁与感知采集",
+        "tables": [
+          {
+            "cn": "三张网进出人员信息(新疆)（remark：三张网小区人员信息\n三张网小区访客信息\n三张网小区车辆信息\n机动车登记信息\n访客登记信息\n门禁进出记录）",
+            "en": "nb_tab_szwjcryxx_lhcz_ai_model_test"
+          }
+        ]
+      },
+      {
+        "name": "网安行为",
+        "tables": [
+          {
+            "cn": "网安_网吧上网人员（网吧上网原始数据）",
+            "en": "nb_tab_wa_wbswry_lhcz_ai_model_test"
+          },
+          {
+            "cn": "网安反馈结果数据_小众应用情况",
+            "en": "ysk_01003_wafkjgsjxzyyqk_001_lhcz_ai_model_test"
+          },
+          {
+            "cn": "网吧数据（网吧上网转换为轨迹格式数据）",
+            "en": "ywk_sc_sjzh_wbss_2_dd_2001_lhcz_ai_model_test"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "出入境与境外",
+    "children": [
+      {
+        "name": "出入境记录",
+        "tables": [
+          {
+            "cn": "出入境记录和证件整合（带身份证号，无证件办理信息）",
+            "en": "ywk_sc_sj_crjjl_sfxx_ql_2001_lhcz_ai_model_test"
+          },
+          {
+            "cn": "出入境记录和证件整合（带身份证号，有证件办理信息）",
+            "en": "ywk_sc_crjglxt_sj_crjjl_sfxx_ql_2001_lhcz_ai_model_test"
+          },
+          {
+            "cn": "新疆籍人员出入境记录和证件办理整合",
+            "en": "ywk_sc_crjglxt_sj_crjjl_xjjry_sfxx_2001_lhcz_ai_model_test"
+          },
+          {
+            "cn": "出入境记录整合表（无身份证号）都是记录护照号",
+            "en": "ywk_sc_sj_crjjl_hz_2001_lhcz_ai_model_test"
+          },
+          {
+            "cn": "最后一次出入境记录",
+            "en": "ywk_sc_sj_crjjl_zjbl_zh_sfzh_last_2001_lhcz_ai_model_test"
+          },
+          {
+            "cn": "外籍人爬取出入境记录",
+            "en": "ywk_sc_wjrpqcrjjl_2001_lhcz_ai_model_test"
+          }
+        ]
+      },
+      {
+        "name": "证件办理",
+        "tables": [
+          {
+            "cn": "出入境证件办理整合表（不包含外籍人员办证信息）",
+            "en": "ywk_sc_zh_crjzjbl_hz_2001_lhcz_ai_model_test"
+          },
+          {
+            "cn": "出入境证件办理整合表（包含外籍人员办证信息）",
+            "en": "ywk_sc_crjglxt_zh_crjzjbl_hz_2001_lhcz_ai_model_test"
+          },
+          {
+            "cn": "护照_出入境证件办理",
+            "en": "nb_tab_hzcrjzjbl_lhcz_ai_model_test"
+          }
+        ]
+      },
+      {
+        "name": "签证信息",
+        "tables": [
+          {
+            "cn": "外籍人签证信息整合（不包含香港、澳门、台湾）",
+            "en": "ywk_sc_wgr_qzxx_hz_df_2001_lhcz_ai_model_test"
+          },
+          {
+            "cn": "外籍人签证数据整合（包含香港、澳门、台湾）",
+            "en": "ywk_sc_wgr_gat_qzxx_hz_df_2001_lhcz_ai_model_test"
+          }
+        ]
+      },
+      {
+        "name": "境外住宿与旅客",
+        "tables": [
+          {
+            "cn": "治安_境外旅客",
+            "en": "nb_tab_za_jwlk_lhcz_ai_model_test"
+          },
+          {
+            "cn": "出入境_境外人员临时住宿(新疆)",
+            "en": "nb_tab_crjjwrylszs_lhcz_ai_model_test"
+          },
+          {
+            "cn": "境外人员临时住宿信息",
+            "en": "ysk_01006_jwrylszsxx_001_lhcz_ai_model_test"
+          }
+        ]
+      },
+      {
+        "name": "境外常住与流动",
+        "tables": [
+          {
+            "cn": "中哈合作中心人员进出信息",
+            "en": "ysk_01003_zhhzzxryjcxx_001_lhcz_ai_model_test"
+          },
+          {
+            "cn": "中哈合作中心交通工具信息",
+            "en": "ysk_01003_zhhzzxjtgjxx_001_lhcz_ai_model_test"
+          },
+          {
+            "cn": "常住境外人员",
+            "en": "ysk_01003_czjwry_001_lhcz_ai_model_test"
+          },
+          {
+            "cn": "境外常住人员信息",
+            "en": "nb_tab_overseas_inhabitant_lhcz_ai_model_test"
+          },
+          {
+            "cn": "科信补全的疆籍流动人员数据",
+            "en": "ysk_01012_kxzdryjbxx_001_lhcz_ai_model_test"
+          },
+          {
+            "cn": "特群赴内地新疆籍人员（维族）",
+            "en": "ywk_sc_zc_sfcj_sjcj_final_df_dd_2001_lhcz_ai_model_test"
+          }
+        ]
+      },
+      {
+        "name": "国籍与身份变更",
+        "tables": [
+          {
+            "cn": "变换国籍 （已确认国籍变更人员）",
+            "en": "ywk_sc_bhgjry_20_lhcz_ai_model_test"
+          },
+          {
+            "cn": "双重国籍信息抽取及标准化双重国籍信息抽取及标准化",
+            "en": "nb_app_scgjxx_lhcz_ai_model_test"
+          },
+          {
+            "cn": "疆籍取得外籍人员",
+            "en": "tmp_ywk_sc_scgjryxx_20_lhcz_ai_model_test"
+          },
+          {
+            "cn": "双重国籍人员信息",
+            "en": "ywk_sc_scgj_result_2001_lhcz_ai_model_test"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "管控名单与标签",
+    "children": [
+      {
+        "name": "重点人员库",
+        "tables": [
+          {
+            "cn": "涉危安重点人",
+            "en": "key_individual_swazdr_lhcz_ai_model_test"
+          },
+          {
+            "cn": "“11+1”类重点人员表|十一类重点人 (12类+13类表)十三类重点人员 11+1",
+            "en": "ywk_sc_skry_12lei_zhenghe_01_lhcz_ai_model_test"
+          },
+          {
+            "cn": "swsk12类重点人员",
+            "en": "ysk_01003_swsk12lzdry_001_lhcz_ai_model_test"
+          }
+        ]
+      },
+      {
+        "name": "名单体系",
+        "tables": [
+          {
+            "cn": "白名单",
+            "en": "ywk_sc_ztk_bmd_2001_lhcz_ai_model_test"
+          },
+          {
+            "cn": "公职人员职业库",
+            "en": "lhcz_wx_jcmx_ryzyk_hbmdry_lhcz_ai_model_test"
+          },
+          {
+            "cn": "防回流工作对象9类黑名单",
+            "en": "ywk_sc_9leipeople_hmd_2001_lhcz_ai_model_test"
+          },
+          {
+            "cn": "分类安检红名单人信息表",
+            "en": "ysk_sc_ut_v_redlist_person_tz_qx_cg_dd_2001_lhcz_ai_model_test"
+          }
+        ]
+      },
+      {
+        "name": "标签体系",
+        "tables": [
+          {
+            "cn": "基础模型_网安标签",
+            "en": "lhcz_qy_jcmx_wabq_result_lhcz_ai_model_test"
+          },
+          {
+            "cn": "标签汇总 （人带各种标签的信息）",
+            "en": "nb_app_bqhz_lhcz_ai_model_test"
+          }
+        ]
+      },
+      {
+        "name": "管控措施",
+        "tables": [
+          {
+            "cn": "重点人员请销假整合",
+            "en": "ywk_sc_temp_xxx_siquan_tmp_ywk_sc_zdryqxj_zhenghe_2001_lhcz_ai_model_test"
+          }
+        ]
+      },
+      {
+        "name": "境外关注对象",
+        "tables": [
+          {
+            "cn": "外籍人管控人员表new",
+            "en": "ysk_99000_wjrgkrybnew_001_lhcz_ai_model_test"
+          },
+          {
+            "cn": "境外新疆籍涉恐人员",
+            "en": "ywk_sc_xjjjwskry_2001_lhcz_ai_model_test"
+          },
+          {
+            "cn": "公安部关注人员资源池_疆籍关注人员",
+            "en": "mxgl_yw_gab_20250210_jjldrkfx_2001_lhcz_ai_model_test"
+          }
+        ]
+      },
+      {
+        "name": "出境未归",
+        "tables": [
+          {
+            "cn": "新疆籍出境未归人员,日全量",
+            "en": "ywk_sc_crj_xj_cjwg_df_2001_lhcz_ai_model_test"
+          }
+        ]
+      },
+      {
+        "name": "走访记录",
+        "tables": [
+          {
+            "cn": "国保重点人走访表",
+            "en": "ysk_02znc_gbzdrzfb_001_lhcz_ai_model_test"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "案事件与监管",
+    "children": [
+      {
+        "name": "接处警",
+        "tables": [
+          {
+            "cn": "警综110接处警",
+            "en": "nb_tab_jz_jcjjbxx_lhcz_ai_model_test"
+          }
+        ]
+      },
+      {
+        "name": "案件",
+        "tables": [
+          {
+            "cn": "警综_案件基本信息",
+            "en": "nb_tab_jz_ajjbxx_lhcz_ai_model_test"
+          },
+          {
+            "cn": "新版涉案库（如需关联案件更多维度信息可使用此表）",
+            "en": "ywk_sc_sak_new_result_2001_lhcz_ai_model_test"
+          },
+          {
+            "cn": "一体化案件（案件，案件线索的来源表）",
+            "en": "mxgl_zc_0222_ythaj_lhcz_ai_model_test"
+          },
+          {
+            "cn": "警综_案件基本信息_new",
+            "en": "ysk_99000_jzajjbxxnew_001_lhcz_ai_model_test"
+          },
+          {
+            "cn": "特侦队_案件",
+            "en": "ysk_01003_aj_001_lhcz_ai_model_test"
+          }
+        ]
+      },
+      {
+        "name": "线索",
+        "tables": [
+          {
+            "cn": "一体化线索（线索，案件线索的来源表）",
+            "en": "mxgl_zc_0222_ythxs_lhcz_ai_model_test"
+          },
+          {
+            "cn": "涉案涉线库",
+            "en": "mxgl_ztk_sasx_zhenghe_ql_lhcz_ai_model_test"
+          },
+          {
+            "cn": "涉线索主题库",
+            "en": "ywk_sc_sxztk_result_2001_lhcz_ai_model_test"
+          }
+        ]
+      },
+      {
+        "name": "预警指令",
+        "tables": [
+          {
+            "cn": "预警指令主表（厅统一工作平台系统推送）",
+            "en": "ysk_01003_yjzlzb_001_lhcz_ai_model_test"
+          },
+          {
+            "cn": "预警指令反馈表（厅统一工作平台系统推送）",
+            "en": "ysk_01003_yjzlfkb_001_lhcz_ai_model_test"
+          },
+          {
+            "cn": "预警指令表（队统一工作平台系统推送）",
+            "en": "lhcz_zyp_dtygzpt_warn_info_result_lhcz_ai_model_test"
+          }
+        ]
+      },
+      {
+        "name": "监管整合",
+        "tables": [
+          {
+            "cn": "汇总监狱、监管数据",
+            "en": "ywk_sc_jysj_jgsj_huizong_2001_lhcz_ai_model_test"
+          },
+          {
+            "cn": "监管类、监狱数据整合，含兵团",
+            "en": "mxgl_ywk_jysj_jgsj_huizong_lhcz_ai_model_test"
+          },
+          {
+            "cn": "看守所、戒毒所、拘留所整合表",
+            "en": "ywk_detentionhouse_jgsjzh_lhcz_ai_model_test"
+          },
+          {
+            "cn": "整合全量监狱监所数据",
+            "en": "mxgl_ywk_jysj_jgsj_final_lhcz_ai_model_test"
+          }
+        ]
+      },
+      {
+        "name": "在押服刑",
+        "tables": [
+          {
+            "cn": "看守所、监狱在押人员表|看守所、监狱服刑人员",
+            "en": "ywk_sc_mxgl_kss_jy_zyry_lhcz_ai_model_test"
+          }
+        ]
+      },
+      {
+        "name": "刑满释放",
+        "tables": [
+          {
+            "cn": "刑满释放人员表|看守所、监狱刑满释放人员(当前)",
+            "en": "ywk_sc_mxgl_xmsfry_current_lhcz_ai_model_test"
+          },
+          {
+            "cn": "刑满释放人员表|看守所、监狱刑满释放人员(历史)",
+            "en": "ywk_sc_mxgl_xmsfry_history_lhcz_ai_model_test"
+          }
+        ]
+      },
+      {
+        "name": "同监区",
+        "tables": [
+          {
+            "cn": "同监区",
+            "en": "mxgl_zc_1204_tjqry_jieguo_lhcz_ai_model_test"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "行为事件与生活活动",
+    "children": [
+      {
+        "name": "住宿旅居",
+        "tables": [
+          {
+            "cn": "旅馆信息 （旅馆的人员住宿信息）",
+            "en": "ywk_sc_sjzh_lvzsxx_2_dd_2001_lhcz_ai_model_test"
+          },
+          {
+            "cn": "治安_国内旅客基本信息",
+            "en": "nb_tab_za_gnlkjbxx_lhcz_ai_model_test"
+          }
+        ]
+      },
+      {
+        "name": "加油行为",
+        "tables": [
+          {
+            "cn": "加油站加油数据",
+            "en": "nb_tab_jyzjysj_lhcz_ai_model_test"
+          },
+          {
+            "cn": "加油站数据(新疆)",
+            "en": "nb_tab_jyzsj_lhcz_ai_model_test"
+          },
+          {
+            "cn": "新的加油信息表（包含每日本人及非本人加油）",
+            "en": "ywk_sc_nb_app_jyxx_dd_2001_lhcz_ai_model_test"
+          },
+          {
+            "cn": "每日本人加油",
+            "en": "ywk_sc_jysj_brjy_daily_181021_2001_lhcz_ai_model_test"
+          },
+          {
+            "cn": "最近六个月加油信息",
+            "en": "ywk_sc_lh_tmp_last_jiayou_new_esc_2001_lhcz_ai_model_test"
+          },
+          {
+            "cn": "每日非本人加油",
+            "en": "ywk_sc_jysj_fbrjy_daily_181021_2001_lhcz_ai_model_test"
+          }
+        ]
+      },
+      {
+        "name": "票务出行",
+        "tables": [
+          {
+            "cn": "民航订座数据",
+            "en": "ywk_sc_sjzh_mhdzsj_2_dd_2001_lhcz_ai_model_test"
+          },
+          {
+            "cn": "民航_民航总局订座数据信息（优先使用此数据）",
+            "en": "nb_tab_mh_mhzjdzsjxx_lhcz_ai_model_test"
+          },
+          {
+            "cn": "民航离港数据整合",
+            "en": "ywk_sc_sjzh_mhjcgsj_2_dd_2001_lhcz_ai_model_test"
+          },
+          {
+            "cn": "铁路售票",
+            "en": "ywk_sc_sjzh_tlspsj_2_dd_2001_lhcz_ai_model_test"
+          },
+          {
+            "cn": "公安部_公安部铁路售票信息",
+            "en": "ysk_06qjc_tlspxx_001_lhcz_ai_model_test"
+          },
+          {
+            "cn": "铁路售票安检信息",
+            "en": "nb_tab_tlspajxx_lhcz_ai_model_test"
+          }
+        ]
+      },
+      {
+        "name": "交通违法",
+        "tables": [
+          {
+            "cn": "交通违法记录",
+            "en": "ywk_sc_ztk_jdcwzxx_2001_lhcz_ai_model_test"
+          },
+          {
+            "cn": "交警交通违法记录",
+            "en": "nb_tab_jj_jjjtwfjl_lhcz_ai_model_test"
+          }
+        ]
+      },
+      {
+        "name": "车辆专题",
+        "tables": [
+          {
+            "cn": "二手车模型",
+            "en": "ywk_sc_ztk_clmx_esc_2001_lhcz_ai_model_test"
+          }
+        ]
+      },
+      {
+        "name": "医疗与社保",
+        "tables": [
+          {
+            "cn": "政法委_医保局_费用明细表",
+            "en": "ysk_01003_zfwybjfymxb_001_lhcz_ai_model_test"
+          },
+          {
+            "cn": "人社厅病人就诊信息",
+            "en": "mxgl_ztk_brjzxx_lhcz_ai_model_test"
+          },
+          {
+            "cn": "人社厅_人社厅个人参保信息",
+            "en": "nb_tab_rst_rstgrcbxx_lhcz_ai_model_test"
+          },
+          {
+            "cn": "人社厅参保信息整合人员信息及单位信息结果表_日增",
+            "en": "ywk_sc_cbryxxzh_dd_2001_lhcz_ai_model_test"
+          }
+        ]
+      },
+      {
+        "name": "消费与金融",
+        "tables": [
+          {
+            "cn": "美团订单信息",
+            "en": "ysk_02zee_mtddxx_001_lhcz_ai_model_test"
+          },
+          {
+            "cn": "银行核查专题整理（人员银行流水）",
+            "en": "ywk_sc_yhhc_yhlsxx_2001_lhcz_ai_model_test"
+          }
+        ]
+      },
+      {
+        "name": "寄递物流",
+        "tables": [
+          {
+            "cn": "寄递数据",
+            "en": "ywk_sc_qsl_zfw_ss_jdsj_zhenghe_2001_lhcz_ai_model_test"
+          },
+          {
+            "cn": "寄递整合",
+            "en": "ywk_sc_qsl_zfw_ss_jdsj_zhenghe_format_2001_lhcz_ai_model_test"
+          }
+        ]
+      },
+      {
+        "name": "重点物品购买",
+        "tables": [
+          {
+            "cn": "购买重点物品信息表",
+            "en": "ywk_sc_purchase_goods_lhcz_ai_model_test"
+          },
+          {
+            "cn": "涉伊民族购买无人机人员",
+            "en": "lhcz_wx_ztk_nb_tab_jdmdsj_gmwrjry_symz_lhcz_ai_model_test"
+          },
+          {
+            "cn": "购买健身器材人员",
+            "en": "lhcz_wx_ztk_nb_tab_jdmdsj_gmjsqcry_lhcz_ai_model_test"
+          },
+          {
+            "cn": "购买制爆器材人员",
+            "en": "lhcz_jwl_ztk_nb_tab_jdmdsj_gmzbqcry_lhcz_ai_model_test"
+          }
+        ]
+      },
+      {
+        "name": "能源异常",
+        "tables": [
+          {
+            "cn": "电力异常一体化数据推送",
+            "en": "ztk_yth_yongdianyichang_lhcz_ai_model_test"
+          }
+        ]
+      },
+      {
+        "name": "房产交易",
+        "tables": [
+          {
+            "cn": "不动产交易",
+            "en": "ywk_sc_real_estate_transaction_lhcz_ai_model_test"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "社会治理与机构",
+    "children": [
+      {
+        "name": "政务工单",
+        "tables": [
+          {
+            "cn": "12345_服务工单交办",
+            "en": "ysk_01003_12345fwgdjb_001_lhcz_ai_model_test"
+          }
+        ]
+      },
+      {
+        "name": "宗教与朝觐",
+        "tables": [
+          {
+            "cn": "宗教传承",
+            "en": "ysk_01003_zjcc_001_lhcz_ai_model_test"
+          },
+          {
+            "cn": "新疆朝觐团朝觐人员名单",
+            "en": "ysk_01003_xjcjtcjrymd_001_lhcz_ai_model_test"
+          },
+          {
+            "cn": "宗教图谱表",
+            "en": "mxgl_zc_0214_lztury_lhcz_ai_model_test"
+          }
+        ]
+      },
+      {
+        "name": "专题图谱",
+        "tables": [
+          {
+            "cn": "六张图谱图谱",
+            "en": "ysk_01023_lztptp_001_lhcz_ai_model_test"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "字典维表",
+    "children": [
+      {
+        "name": "行政区划",
+        "tables": [
+          {
+            "cn": "全国行政区划码表",
+            "en": "ut_administrative_division_lhcz_ai_model_test"
+          },
+          {
+            "cn": "全国行政区划(后面不补零版)",
+            "en": "dim_wd_xzqh_new_lhcz_ai_model_test"
+          },
+          {
+            "cn": "全国行政区划补充表（全国行政区划码表没有部分兵团行政区划，在此进行补充）",
+            "en": "lhcz_zyp_xzqhbc_lhcz_ai_model_test"
+          },
+          {
+            "cn": "全国省市区街道数据整合",
+            "en": "zsk_dim_ssxqjdxq_all_2001_lhcz_ai_model_test"
+          }
+        ]
+      },
+      {
+        "name": "出入境字典",
+        "tables": [
+          {
+            "cn": "知识库_口岸代码表",
+            "en": "zsk_jc_kadm_2001_lhcz_ai_model_test"
+          },
+          {
+            "cn": "知识库_国家地区代码表",
+            "en": "zsk_jc_gjdqdm_2001_lhcz_ai_model_test"
+          },
+          {
+            "cn": "知识库_出入境事由代码表",
+            "en": "zsk_jc_crjsydm_2001_lhcz_ai_model_test"
+          }
+        ]
+      },
+      {
+        "name": "警综/交警字典",
+        "tables": [
+          {
+            "cn": "警综字典类型表",
+            "en": "zsk_jc_jzzdlxb_2002_lhcz_ai_model_test"
+          },
+          {
+            "cn": "警综字典代码表",
+            "en": "zsk_jc_jzzddmb_2002_lhcz_ai_model_test"
+          },
+          {
+            "cn": "交警总队违法行为代码表",
+            "en": "zsk_jc_jjzdwfxwdmb_2002_lhcz_ai_model_test"
+          },
+          {
+            "cn": "字典表_交警综合应用平台（公安部级平台）",
+            "en": "zsk_jc_zdbjjzhyyptgabjpt_2002_lhcz_ai_model_test"
+          },
+          {
+            "cn": "字典表-交警总队-交警综合应用平台（公安部级平台）_字典类型表",
+            "en": "zsk_jc_zdbjjzdjjzhyyptgabjptzdlxb_2002_lhcz_ai_model_test"
+          }
+        ]
+      },
+      {
+        "name": "通信与站点字典",
+        "tables": [
+          {
+            "cn": "手机号段归属地",
+            "en": "zsk_jc_sjhdgsd_2002_lhcz_ai_model_test"
+          },
+          {
+            "cn": "火车站点",
+            "en": "ztk_train_division_lhcz_ai_model_test"
+          }
+        ]
+      },
+      {
+        "name": "机构字典",
+        "tables": [
+          {
+            "cn": "行政_公安机关组织结构(公安机关的组织架构)",
+            "en": "nb_tab_xzgajgzzjg_lhcz_ai_model_test"
+          }
+        ]
+      }
+    ]
+  }
+]

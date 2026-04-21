@@ -1,0 +1,192 @@
+[
+  {
+    "id": 1,
+    "query": "请列出2024年1月1日至2024年6月30日期间，所有出疆通行记录的塔城籍人员名单（含姓名、身份证号、出疆时间、出疆方式、具体点位名称）。",
+    "sql": "",
+    "tables": [
+      "ywk_sc_czrkjbxx_zhenghe_2001_lhcz_ai_model_test",
+      "lhcz_zyp_glcjrj_result_lhcz_ai_model_test",
+      "ywk_sc_sj_gjzh_new_1_dd_2001_lhcz_ai_model_test"
+    ]
+  },
+  {
+    "id": 2,
+    "query": "请识别出在2024-05-10至2024-05-11期间，与重点人员张某某（身份证号：650101199001012345）存在≥2次设备同行的非亲属关系人员名单",
+    "sql": "",
+    "tables": [
+      "lhcz_qy_sk_geohash_sbtx_cardno_result_lhcz_ai_model_test",
+      "ywk_sc_ztk_huji_hunyin_zhenghe_guanxi_2001_lhcz_ai_model_test"
+    ]
+  },
+  {
+    "id": 3,
+    "query": "请从刑满释放人员库中，筛选近5年内是否存在与他人共同乘坐G102次高铁（同车次、同车厢、同日期）的同行关系？",
+    "sql": "",
+    "tables": [
+      "mxgl_ywk_jysj_jgsj_huizong_lhcz_ai_model_test",
+      "ywk_sc_sj_gjzh_new_1_dd_2001_lhcz_ai_model_test"
+    ]
+  },
+  {
+    "id": 4,
+    "query": "请核查阿不都热合曼·买买提（身份证号：650103199005202315，民族：维吾尔族）是否在2020—2024年期间有刑事立案记录？",
+    "sql": "",
+    "tables": [
+      "mxgl_ztk_sasx_zhenghe_ql_lhcz_ai_model_test"
+    ]
+  },
+  {
+    "id": 5,
+    "query": "请检索2024年5月17日以来，涉及沙依巴克区居民王某某（身份证号65010319781105XXXX）的全部刑事案件卷宗，确认其是否与重点人员阿某（身份证号65300119920418XXXX）在同一案件中被列为共犯、证人或受害人",
+    "sql": "",
+    "tables": [
+      "mxgl_zc_0222_ythaj_lhcz_ai_model_test"
+    ]
+  },
+  {
+    "id": 6,
+    "query": "请调取2024年5月17日至6月16日期间，核查赵某某（身份证号65010419830912XXXX）与周某某（身份证号65010319910130XXXX）是否存在同期羁押、同监室关押",
+    "sql": "",
+    "tables": [
+      "mxgl_ywk_jysj_jgsj_huizong_lhcz_ai_model_test"
+    ]
+  },
+  {
+    "id": 7,
+    "query": "请调取2024年5月1日至5月31日期间，人员B（身份证号：653221198811205634）与人员C（身份证号：653221199204154821）在感知数据中，空间坐标距离≤50米且时间重叠<=5分钟的共现记录，统计满足条件的次数并列出每次的时间、地点经纬度及数据源类型。",
+    "sql": "",
+    "tables": [
+      "ywk_sc_dgz_dg_ry_zh_new_2001_lhcz_ai_model_test"
+    ]
+  },
+  {
+    "id": 8,
+    "query": "请核查旅客张某某（身份证号11010119900304251X）近7日内民航进出港记录中，出发时间2024-05-10 08:20（乌鲁木齐地窝堡机场T3）至到达时间2024-05-10 12:45（北京首都机场T3）之间，是否在乌鲁木齐市存在住宿（酒店登记）、加油（中石化POS流水）、网吧上网（网安实名认证）或地感基站停留（连续驻留≥30分钟）任一轨迹？",
+    "sql": "",
+    "tables": [
+      "ywk_sc_sj_gjzh_new_1_dd_2001_lhcz_ai_model_test"
+    ]
+  },
+  {
+    "id": 9,
+    "query": "请查找重点人员近6个月内是否有二手车交易登记信息？",
+    "sql": "",
+    "tables": [
+      "ywk_sc_ztk_clmx_esc_2001_lhcz_ai_model_test",
+      "mxgl_ywk_jysj_jgsj_huizong_lhcz_ai_model_test"
+    ]
+  },
+  {
+    "id": 10,
+    "query": "请查找近90日内购买过重点物品（包括但不限于：硝酸铵、高氯酸盐、双氧水（浓度≥30%）、电击器、弩、卫星电话、加密U盘、SIM卡群发器）？",
+    "sql": "",
+    "tables": [
+      "ywk_sc_purchase_goods_lhcz_ai_model_test"
+    ]
+  },
+  {
+    "id": 11,
+    "query": "请查询身份证号为65270119900512XXXX（博州户籍、当前无有效驾驶证）的人员，近6个月在博州辖区内加油站的全部加油记录，包括时间、站点名称、油品类型、金额、车牌号（如有）。",
+    "sql": "",
+    "tables": [
+      "ywk_sc_sj_gjzh_new_1_dd_2001_lhcz_ai_model_test"
+    ]
+  },
+  {
+    "id": 12,
+    "query": "请核查2024年第二季度内，在工作日8:00–18:00或凌晨0:00–6:00时段，于本市网吧累计上网达12天（其中单月≥5天）的人员中，尚未办理本市居住登记且无有效流动人口信息备案的个体名单及对应网吧上网记录详情。",
+    "sql": "",
+    "tables": [
+      "ywk_sc_sj_gjzh_new_1_dd_2001_lhcz_ai_model_test",
+      "ywk_sc_czrkjbxx_zhenghe_2001_lhcz_ai_model_test",
+      "nb_tab_jz_ldrkxx_lhcz_ai_model_test"
+    ]
+  },
+  {
+    "id": 13,
+    "query": "请筛查人员张某某（身份证号650103198512124567）在2024年6月1日—6月7日期间，在阿克苏地区（行政区划代码652900）出现的全部人像轨迹，判断其是否满足“近7日内有旅店住宿+检查站通行”双轨迹条件；如满足，请输出住宿登记时间、检查站名称及通行时间。",
+    "sql": "",
+    "tables": [
+      "ysk_01003_gzsbapplb_trans_001_lhcz_ai_model_test",
+      "ysk_01012_sbmzxxb_trans_001_lhcz_ai_model_test",
+      "lhcz_wx_sjh_rylshmk_pca_result_lhcz_ai_model_test"
+    ]
+  },
+  {
+    "id": 14,
+    "query": "请核查2024年6月15日昌吉州辖区内所有涉案未成年人员中，是否存在任意一人在当日14:22:18—14:22:48时段内，于昌吉市延安北路某小区东门地感设备（ID：CJ-DG-2023-087）触发连续轨迹，且与已知涉案人员其他人员同地感？",
+    "sql": "",
+    "tables": [
+      "ywk_sc_sj_gjzh_new_1_dd_2001_lhcz_ai_model_test"
+    ]
+  },
+  {
+    "id": 15,
+    "query": "请核查人员阿不都热合曼·买买提（身份证号653201199203151234）被标注为“四圈人员”还是“三圈人员”？",
+    "sql": "",
+    "tables": [
+      "ywk_sc_xxx_ztk_di_san_quan_ry_2001_lhcz_ai_model_test",
+      "ywk_sc_di_si_quan_ry_hui_zong_final_df_2001_lhcz_ai_model_test",
+      "mxgl_yw_20230912_234quan_zh_qc_cl_lhcz_ai_model_test"
+    ]
+  },
+  {
+    "id": 16,
+    "query": "请核查人员麦麦提·玉苏甫（身份证号653201199005121411）关联的宗教极端体系传承图谱名称有哪些？共涉及几条独立图谱？",
+    "sql": "",
+    "tables": [
+      "lhcz_wx_zjjdsxcc_tupu_lhcz_ai_model_test"
+    ]
+  },
+  {
+    "id": 17,
+    "query": "请调取社保参保记录，核实身份证号为653001199211052879的人员在2021年1月1日至2024年6月30日期间，是否存在连续12个月及以上正常缴纳企业职工基本养老保险或城乡居民基本养老保险的记录？",
+    "sql": "",
+    "tables": [
+      "ywk_sc_cbryxxzh_dd_2001_lhcz_ai_model_test"
+    ]
+  },
+  {
+    "id": 18,
+    "query": "请调取全区旅馆业治安管理系统，统计身份证号为653023199102150037的人员在2021年7月1日至2024年6月30日期间登记入住宾馆的总次数？",
+    "sql": "",
+    "tables": [
+      "ywk_sc_sj_gjzh_new_1_dd_2001_lhcz_ai_model_test"
+    ]
+  },
+  {
+    "id": 19,
+    "query": "请统计身份证号为652901199408221629的人员在2024年6月1日至2024年6月30日期间收/寄快递的总频次（同一日多单计多次），是否≥2次？",
+    "sql": "",
+    "tables": [
+      "ywk_sc_qsl_zfw_ss_jdsj_zhenghe_2001_lhcz_ai_model_test",
+      "ywk_sc_qsl_zfw_ss_jdsj_zhenghe_format_2001_lhcz_ai_model_test"
+    ]
+  },
+  {
+    "id": 20,
+    "query": "请核查身份证号为653022199803200016的人员父母是否均被双判？",
+    "sql": "",
+    "tables": [
+      "ywk_sc_czrkgx_zxqs_result_2001_lhcz_ai_model_test",
+      "mxgl_ywk_jysj_jgsj_huizong_lhcz_ai_model_test"
+    ]
+  },
+  {
+    "id": 21,
+    "query": "请核查家庭关系人王某（身份证号653001198805214567）名下护照号E12345678近一年内是否有出入境记录；如有，请输出全部出入境口岸、日期及事由。",
+    "sql": "",
+    "tables": [
+      "ywk_sc_sj_crjjl_sfxx_ql_2001_lhcz_ai_model_test"
+    ]
+  },
+  {
+    "id": 22,
+    "query": "请核查同时被标注为“涉诈重点人”和“邪教重点人”的双重身份人员名单（含姓名、身份证号、最新标注日期、所属派出所）。",
+    "sql": "",
+    "tables": [
+      "ywk_sc_skry_12lei_zhenghe_01_lhcz_ai_model_test",
+      "ywk_sc_ztk_sjzh_czrkzh_2001_lhcz_ai_model_test"
+    ]
+  }
+]

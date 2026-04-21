@@ -1,0 +1,1997 @@
+id,query,tables,sql,flag,备注
+1,最近一年新增的涉案线数据是什么样的?,mxgl_ztk_sasx_zhenghe_ql_lhcz_ai_model_test,"SELECT
+    xing_ming,
+    sfzh,
+    lalxsj,
+    ajxslbmc,
+    ajxsmc,
+    jyaq,
+    ranks
+FROM mxgl_ztk_sasx_zhenghe_ql_lhcz_ai_model_test
+WHERE
+    lalxsj >= DATEADD(GETDATE(), -365, 'DD')
+ORDER BY
+    CAST(ranks AS DOUBLE) DESC,
+    lalxsj DESC;",,
+2,近一年新增了哪些问题歌曲和书籍的情报？,lhcz_qy_jcmx_wabq_result_lhcz_ai_model_test,"SELECT distinct 
+  qbidhz,
+  sj
+FROM lhcz_qy_jcmx_wabq_result_lhcz_ai_model_test
+WHERE
+  dt >= TO_CHAR(DATEADD(GETDATE(), -365, 'DD'), 'yyyymmdd')
+  AND dt <= TO_CHAR(GETDATE(), 'yyyymmdd')
+  AND qbidhz IS NOT NULL
+  AND qbidhz <> ''
+  AND (
+      rylb = ""问题歌曲及书籍""
+  );
+",,
+3,2025年8月份我们掌握了哪些问题歌曲和书籍情报？,lhcz_qy_jcmx_wabq_result_lhcz_ai_model_test,"SELECT distinct
+    qbid    AS 情报ID,
+    qbidhz  AS 问题内容描述,
+    sj      AS 发现时间
+FROM lhcz_qy_jcmx_wabq_result_lhcz_ai_model_test
+WHERE
+    -- 时间口径：2025年9月
+    sj >= '2025-08-01 00:00:00'
+    AND sj <  '2025-09-01 00:00:00'
+
+    -- 问题歌曲 / 书籍的文本特征识别
+    AND (
+        rylb = ""问题歌曲及书籍""
+    );",,
+4,身份证为 530502201112120096 是外逃人员吗？,ywk_sc_9leipeople_hmd_2001_lhcz_ai_model_test,"SELECT DISTINCT 
+  lx,
+  czcs,
+  clue_dst_sys,
+  security_software_orgname,
+  sensitive_level,
+  first_time,
+  last_time
+FROM ywk_sc_9leipeople_hmd_2001_lhcz_ai_model_test
+WHERE sfzh = '530502201112120096'
+  AND dt = MAX_PT('ywk_sc_9leipeople_hmd_2001_lhcz_ai_model_test');",,
+5,人员533103201408080123的住址在哪里？,ywk_sc_czrkjbxx_zhenghe_2001_lhcz_ai_model_test,"SELECT
+  xing_ming    AS 姓名,
+  dzssxq 地址所属县区,
+  dzxz AS 地址详址
+FROM ztk_mxgl_rydzxx_lhcz_ai_model_test
+WHERE gong_min_shen_fen_hao_ma = '533103201408080123';",,
+6,110105199306120376 最可能住在哪里？,ywk_ywsck_ryhdglsj_001_lhcz_ai_model_test,"SELECT * from 
+(select *,
+row_number() over(partition by zjhm order by dwmc_pc desc,dwmc_ts desc)  as row_num 
+from ywk_ywsck_ryhdglsj_001_lhcz_ai_model_test 
+where zjhm = '110105199306120376' and dwbq = '居住场所'  ) a
+WHERE a.row_num=1;",,
+7,五华区华山派出所辖区内人口有多少,ywk_sc_czrkjbxx_zhenghe_2001_lhcz_ai_model_test,"SELECT
+  COUNT(DISTINCT gong_min_shen_fen_hao_ma) AS 人口数量
+FROM ywk_sc_czrkjbxx_zhenghe_2001_lhcz_ai_model_test
+WHERE hu_ji_pai_chu_suo_ming_cheng like '%五华区华山派出所%'
+  AND guan_li_zhuang_tai = '1';",,
+8,八月份成都流入昆明的人员列表,nb_tab_jz_ldrkxx_lhcz_ai_model_test,"SELECT 
+  xing_ming                AS 姓名, 
+  gong_min_shen_fen_hao_ma AS 身份证号, 
+  qian_ru_liu_ru_ri_qi     AS 流入日期 
+FROM nb_tab_jz_ldrkxx_lhcz_ai_model_test 
+WHERE lai_zi_sheng_shi_xian_qu like '%成都%'
+  and qu_wang_sheng_shi_xian_qu like '%昆明%'
+  AND qian_ru_liu_ru_ri_qi BETWEEN 20250801 AND 20250831;",,
+9,九月份流入昆明的人员有多少,nb_tab_jz_ldrkxx_lhcz_ai_model_test,"SELECT
+  COUNT(DISTINCT gong_min_shen_fen_hao_ma) AS person_cnt
+FROM nb_tab_jz_ldrkxx_lhcz_ai_model_test
+WHERE
+qian_ru_liu_ru_ri_qi  BETWEEN 20250901 AND 20250930
+AND jzdzssxqmc like '%昆明%';",,
+10,证件号为 532901198308080199 的人员和证件号为 533102198409090226 的人员是否婚姻存续？,hydjxx_zhenghe_final_lhcz_ai_model_test,"SELECT
+  zjhm_m,
+  zjhm_w,
+  djlx,
+  djrq,
+  flag
+FROM hydjxx_zhenghe_final_lhcz_ai_model_test
+WHERE
+  (
+    zjhm_m = '532901198308080199'
+    AND zjhm_w = '533102198409090226'
+  )
+  OR
+  (
+    zjhm_m = '533102198409090226'
+    AND zjhm_w = '532901198308080199'
+  ) and flag = '是';",,
+11,证件号为 530802198203100033 的前妻有几个?,hydjxx_zhenghe_final_lhcz_ai_model_test,"SELECT
+  COUNT(DISTINCT zjhm_w) AS 前妻人数
+FROM hydjxx_zhenghe_final_lhcz_ai_model_test
+WHERE
+  zjhm_m = '530802198203100033'
+  AND flag = '否';",,
+12,学生 530602201306060103 与 532502201306060185 是否为同学。,lhcz_wx_tmp_ztk_students_lhcz_ai_model_test,"SELECT
+    CASE WHEN COUNT(*) > 0 THEN '是同学' ELSE '不是同学' END AS 判断结果
+FROM lhcz_wx_tmp_ztk_students_lhcz_ai_model_test a
+JOIN lhcz_wx_tmp_ztk_students_lhcz_ai_model_test b
+  ON a.xxmc = b.xxmc
+ AND a.sfzh <> b.sfzh
+WHERE a.sfzh = '530602201306060103'
+  AND b.sfzh = '532502201306060185';",,
+13,证件号为 53250219760211015X 的人员和证件号为 530112199608080252 的人员是否同监区,mxgl_ywk_jysj_jgsj_huizong_lhcz_ai_model_test,"SELECT *
+FROM mxgl_ywk_jysj_jgsj_huizong_lhcz_ai_model_test a
+JOIN mxgl_ywk_jysj_jgsj_huizong_lhcz_ai_model_test b
+  ON a.jq_id = b.jq_id
+WHERE a.sfzh = '53250219760211015X'
+  AND b.sfzh = '530112199608080252'
+  AND a.ryzt = '在押'
+  AND b.ryzt = '在押';",,
+14,证件号为 530103199906060050 的人员是否存在人证轨迹不符情况,ywk_sc_dgz_dg_ry_zh_ss_new_2001_lhcz_ai_model_test;ywk_sc_sj_gjzh_new_1_dd_2001_lhcz_ai_model_test,"WITH face_traj AS (
+    SELECT
+        zjhm        AS id_no,
+        collecttime AS face_time,
+        areacode    AS face_area_code,
+        dian_wei_ming_chen AS face_location
+    FROM ywk_sc_dgz_dg_ry_zh_ss_new_2001_lhcz_ai_model_test
+    WHERE zjhm = '530103199906060050'
+),
+id_traj AS (
+    SELECT
+        zheng_jian_hao AS id_no,
+        huo_dong_kai_shi_shi_jian AS start_time,
+        huo_dong_jie_shu_shi_jian AS end_time,
+        huo_dong_kai_shi_di_zip_code AS start_area_code
+    FROM ywk_sc_sj_gjzh_new_1_dd_2001_lhcz_ai_model_test
+    WHERE zheng_jian_hao = '530103199906060050'
+)
+SELECT
+    f.id_no,
+    f.face_time,
+    f.face_location,
+    i.start_time,
+    i.end_time
+FROM face_traj f
+LEFT JOIN id_traj i
+  ON f.id_no = i.id_no
+ AND f.face_time BETWEEN i.start_time AND i.end_time
+WHERE i.id_no IS NULL
+   OR f.face_area_code <> i.start_area_code;",,
+15,计划一年内天去往北京的人员在哪些,ywk_sc_sj_gjzh_new_1_dd_2001_lhcz_ai_model_test,"SELECT
+    xing_ming                      AS 姓名,
+    zheng_jian_hao                 AS 证件号,
+    huo_dong_kai_shi_shi_jian      AS 计划出发时间,
+    huo_dong_jie_shu_shi_jian      AS 计划到达时间,
+    huo_dong_jie_shu_di_sheng      AS 活动结束地省,
+    ban_ci                         AS 班次
+FROM ywk_sc_sj_gjzh_new_1_dd_2001_lhcz_ai_model_test
+WHERE
+    substr(huo_dong_jie_shu_di_zip_code, 1, 2) = '10'
+    AND huo_dong_kai_shi_shi_jian >= GETDATE()
+    AND huo_dong_kai_shi_shi_jian <  DATEADD(GETDATE(), 365, 'dd');",,
+16,涉及浏览问题歌曲的人员中有哪些人员具备宗教极端思想？,lhcz_qy_jcmx_wabq_result_lhcz_ai_model_test;mxgl_zc_0214_lztury_lhcz_ai_model_test,"SELECT DISTINCT
+    w.sfzh        AS sfzh,        -- 身份证号
+    w.sjhm        AS sjhm,        -- 手机号码
+    w.appname     AS appname,     -- 浏览/使用的小众应用
+    z.tpcode      AS tpcode,      -- 图谱标签代码
+    z.tpname      AS tpname       -- 图谱名称
+FROM lhcz_qy_jcmx_wabq_result_lhcz_ai_model_test w
+JOIN mxgl_zc_0214_lztury_lhcz_ai_model_test z
+    ON w.sfzh = z.idcard
+WHERE
+    -- ① 浏览“问题歌曲”相关人员
+    w.rylb LIKE '%问题歌曲%'
+    -- ② 具备宗教极端思想标签
+    AND z.tptype_name LIKE '%极端%';",,
+17,身份证为 530103199906060050 的外逃人员的涉案、情报、线索是什么？,lhcz_qy_jcmx_wabq_result_lhcz_ai_model_test;mxgl_ztk_sasx_zhenghe_ql_lhcz_ai_model_test,"SELECT
+    '案件线索'            AS info_type,     -- 信息类型
+    sfzh                  AS sfzh,          -- 身份证号
+    ajxsbh                AS ref_id,        -- 案件线索编号
+    ajxslbmc              AS category,      -- 线索类别
+    ajxsmc                AS title,         -- 线索名称
+    jyaq                  AS content,       -- 交办案情
+    lalxsj                AS occur_time     -- 时间
+FROM mxgl_ztk_sasx_zhenghe_ql_lhcz_ai_model_test
+WHERE sfzh = '530103199906060050'
+
+UNION ALL
+
+SELECT
+    '情报信息'            AS info_type,     -- 信息类型
+    sfzh                  AS sfzh,          -- 身份证号
+    qbid                  AS ref_id,        -- 情报ID
+    rylb                  AS category,      -- 人员类别
+    qbidhz                AS title,         -- 情报标题
+    sacs                  AS content,       -- 涉案次数
+    sj                    AS occur_time     -- 情报时间
+FROM lhcz_qy_jcmx_wabq_result_lhcz_ai_model_test
+WHERE sfzh = '530103199906060050';",,
+18,证件号为 532501198006150145 的人员近一年是否存在变卖家产后出入境情况,ywk_sc_crjglxt_sj_crjjl_sfxx_ql_2001_lhcz_ai_model_test;ywk_sc_real_estate_transaction_lhcz_ai_model_test,"WITH estate_sell AS (
+    -- ① 近三个月变卖家产记录
+    SELECT
+        zjh        AS sfzh,
+        sj         AS sell_time,
+        djyy       AS sell_reason,
+        fdzl       AS house_location
+    FROM ywk_sc_real_estate_transaction_lhcz_ai_model_test
+    WHERE zjh = '532501198006150145'
+      AND sj >= DATEADD(GETDATE(), -12, 'MM')
+),
+
+exit_record AS (
+    -- ② 近三个月出境记录
+    SELECT
+        sfzh,
+        CAST(chu_ru_jing_shi_jian AS DATETIME) AS exit_time,
+        chu_ru_jing_kou_an        AS exit_port,
+        qian_wang_guo_jia         AS destination_country
+    FROM ywk_sc_crjglxt_sj_crjjl_sfxx_ql_2001_lhcz_ai_model_test
+    WHERE sfzh = '532501198006150145'
+      AND chu_ru_jing_biao_shi = '出境'
+      AND CAST(chu_ru_jing_shi_jian AS DATETIME)
+            >= DATEADD(GETDATE(), -12, 'MM')
+)
+
+-- ③ 变卖家产后发生出境的情况
+SELECT
+    e.sfzh                 AS 身份证号,
+    e.sell_time            AS 变卖时间,
+    e.sell_reason          AS 变卖原因,
+    e.house_location       AS 房屋地址,
+    x.exit_time            AS 出境时间,
+    x.exit_port            AS 出境口岸,
+    x.destination_country  AS 前往国家
+FROM estate_sell e
+JOIN exit_record x
+  ON e.sfzh = x.sfzh
+ AND x.exit_time >= e.sell_time;",,
+19,身份证 530321197407070259 的人员是否与安装小众软件人员存在同WIFI情况,lhcz_qy_jcmx_wabq_result_lhcz_ai_model_test;lhcz_ghm_twifi_sfzh_results_lhcz_ai_model_test,"WITH app_person AS (
+    -- ① 安装小众软件的人员
+    SELECT DISTINCT
+        sfzh
+    FROM lhcz_qy_jcmx_wabq_result_lhcz_ai_model_test
+    WHERE appname IS NOT NULL
+),
+
+wifi_hit_1 AS (
+    -- ② 情况一：目标人员在 gxr_sfzh
+    SELECT
+        w.sfzh,
+        w.gxr_sfzh,
+        w.ssid,
+        w.bssid,
+        w.min_time,
+        w.max_time,
+        w.xj_sc
+    FROM lhcz_ghm_twifi_sfzh_results_lhcz_ai_model_test w
+    JOIN app_person a
+      ON w.sfzh = a.sfzh
+    WHERE w.gxr_sfzh = '530321197407070259'
+),
+
+wifi_hit_2 AS (
+    -- ③ 情况二：目标人员在 sfzh
+    SELECT
+        w.sfzh,
+        w.gxr_sfzh,
+        w.ssid,
+        w.bssid,
+        w.min_time,
+        w.max_time,
+        w.xj_sc
+    FROM lhcz_ghm_twifi_sfzh_results_lhcz_ai_model_test w
+    JOIN app_person a
+      ON w.gxr_sfzh = a.sfzh
+    WHERE w.sfzh = '530321197407070259'
+)
+
+-- ④ 合并结果
+SELECT * FROM wifi_hit_1
+UNION ALL
+SELECT * FROM wifi_hit_2;",,
+20,身份证 530111197802020063 的人员的亲属中是否有12类重点人,ywk_sc_ztk_huji_hunyin_zhenghe_guanxi_2001_lhcz_ai_model_test;ywk_sc_skry_12lei_zhenghe_01_lhcz_ai_model_test,"
+with t1 as(
+   select distinct hu_hao from ywk_sc_ztk_huji_hunyin_zhenghe_guanxi_2001_lhcz_ai_model_test 
+   WHERE sfzh = '530111197802020063'
+)
+SELECT
+    g.sfzh                     AS 亲属身份证号,
+    g.guan_xi                  AS 关系类型,
+    k.xm                       AS 亲属姓名,
+    k.rylbmc                   AS 重点人员类别,
+    k.sjlx                     AS 事件类型,
+    k.rylb_name_lv1            AS 一级类别,
+    k.rylb_name_lv2            AS 二级类别
+FROM ywk_sc_ztk_huji_hunyin_zhenghe_guanxi_2001_lhcz_ai_model_test g
+JOIN ywk_sc_skry_12lei_zhenghe_01_lhcz_ai_model_test k
+  ON g.sfzh = k.sfzh
+WHERE g.hu_hao in (select hu_hao from t1);",,
+21,身份证号为 530802198203100033 的人员与身份证号为 53250219760211015X 是否存在为同一车辆进行加油或者处理违章行为。,lhcz_ghm_rjgx_tjy_ycyb_new_lhcz_ai_model_test;nb_tab_jj_jjjtwfjl_lhcz_ai_model_test,"WITH
+/* ① 同车加油关系判定 */
+same_oil AS (
+    SELECT
+        '同车加油'        AS relation_type,
+        sfzh1             AS person_a,
+        sfzh2             AS person_b,
+        cnt               AS occur_cnt,
+        min_sj            AS first_time,
+        max_sj            AS last_time,
+        CAST(NULL AS STRING) AS car_no
+    FROM lhcz_ghm_rjgx_tjy_ycyb_new_lhcz_ai_model_test
+    WHERE
+        (sfzh1 = '530802198203100033' AND sfzh2 = '53250219760211015X')
+        OR
+        (sfzh1 = '53250219760211015X' AND sfzh2 = '530802198203100033')
+),
+
+/* ② 涉及两人的违章记录（按车牌聚合） */
+person_violation AS (
+    SELECT
+        hao_pai_hao_ma,
+        id_num
+    FROM nb_tab_jj_jjjtwfjl_lhcz_ai_model_test
+    WHERE
+        dt IS NOT NULL
+        AND id_num IN ('530802198203100033', '53250219760211015X')
+),
+
+/* ③ 同一车牌下出现两人的情况 */
+same_violation_car AS (
+    SELECT
+        hao_pai_hao_ma
+    FROM person_violation
+    GROUP BY hao_pai_hao_ma
+    HAVING COUNT(DISTINCT id_num) = 2
+),
+
+/* ④ 同车违章关系输出 */
+same_violation AS (
+    SELECT
+        '同车违章'        AS relation_type,
+        '530802198203100033' AS person_a,
+        '53250219760211015X' AS person_b,
+        COUNT(*)           AS occur_cnt,
+        CAST(NULL AS STRING) AS first_time,
+        CAST(NULL AS STRING) AS last_time,
+        p.hao_pai_hao_ma   AS car_no
+    FROM person_violation p
+    JOIN same_violation_car c
+      ON p.hao_pai_hao_ma = c.hao_pai_hao_ma
+    GROUP BY p.hao_pai_hao_ma
+)
+
+/* ⑤ 汇总输出 */
+SELECT * FROM same_oil
+UNION ALL
+SELECT * FROM same_violation;",,
+22,两个或两个以上外籍人员，同时或错时跟滇内同一人员存在1次及以上同行、同住、同wifi等情况,ywk_sc_crjglxt_sj_crjjl_sfxx_ql_2001_lhcz_ai_model_test;dws_ztk_airplane_trace_lhcz_ai_model_test;dws_ztk_train_trace_lhcz_ai_model_test;dws_ztk_coach_trace_lhcz_ai_model_test;ztk_check_inout_hotel_lhcz_ai_model_test;lhcz_ghm_twifi_sfzh_results_lhcz_ai_model_test,"WITH foreign_people AS (
+    -- 外籍人员基础表（国籍维度）
+    SELECT DISTINCT
+        sfzh AS foreign_sfzh,
+        guo_ji
+    FROM ywk_sc_crjglxt_sj_crjjl_sfxx_ql_2001_lhcz_ai_model_test
+    WHERE sfzh IS NOT NULL
+      AND guo_ji IS NOT NULL
+      AND guo_ji <> '中国'
+),
+
+travel_together AS (
+    -- 民航同行
+    SELECT
+        a.sfzh AS foreign_sfzh,
+        b.sfzh AS yunnan_sfzh
+    FROM dws_ztk_airplane_trace_lhcz_ai_model_test a
+    JOIN dws_ztk_airplane_trace_lhcz_ai_model_test b
+      ON a.id = b.id
+     AND a.sfzh <> b.sfzh
+    WHERE substr(b.sfzh,1,2) = '53'
+
+    UNION ALL
+
+    -- 铁路同行
+    SELECT
+        a.sfzh,
+        b.sfzh
+    FROM dws_ztk_train_trace_lhcz_ai_model_test a
+    JOIN dws_ztk_train_trace_lhcz_ai_model_test b
+      ON a.id = b.id
+     AND a.sfzh <> b.sfzh
+    WHERE substr(b.sfzh,1,2) = '53'
+
+    UNION ALL
+
+    -- 客运同行
+    SELECT
+        a.sfzh,
+        b.sfzh
+    FROM dws_ztk_coach_trace_lhcz_ai_model_test a
+    JOIN dws_ztk_coach_trace_lhcz_ai_model_test b
+      ON a.che_ci = b.che_ci
+     AND a.cfsj   = b.cfsj
+     AND a.sfzh  <> b.sfzh
+    WHERE substr(b.sfzh,1,2) = '53'
+),
+
+hotel_together AS (
+    -- 同住
+    SELECT
+        a.zheng_jian_hao_ma AS foreign_sfzh,
+        b.zheng_jian_hao_ma AS yunnan_sfzh
+    FROM ztk_check_inout_hotel_lhcz_ai_model_test a
+    JOIN ztk_check_inout_hotel_lhcz_ai_model_test b
+      ON a.room_id = b.room_id
+     AND a.zheng_jian_hao_ma <> b.zheng_jian_hao_ma
+    WHERE substr(b.zheng_jian_hao_ma,1,2) = '53'
+),
+
+wifi_together AS (
+    -- 同 WIFI
+    SELECT
+        sfzh     AS foreign_sfzh,
+        gxr_sfzh AS yunnan_sfzh
+    FROM lhcz_ghm_twifi_sfzh_results_lhcz_ai_model_test
+    WHERE xj_sc > 0
+      AND substr(gxr_sfzh,1,2) = '53'
+),
+
+all_relations AS (
+    -- 汇总所有关系
+    SELECT foreign_sfzh, yunnan_sfzh FROM travel_together
+    UNION ALL
+    SELECT foreign_sfzh, yunnan_sfzh FROM hotel_together
+    UNION ALL
+    SELECT foreign_sfzh, yunnan_sfzh FROM wifi_together
+)
+
+-- 最终结果：关联 ≥2 个不同国家外籍人员的滇内人员
+SELECT
+    r.yunnan_sfzh                         AS 滇内人员身份证号,
+    COUNT(DISTINCT f.foreign_sfzh)        AS 关联外籍人数,
+    COUNT(DISTINCT f.guo_ji)              AS 涉及国家数
+FROM all_relations r
+JOIN foreign_people f
+  ON r.foreign_sfzh = f.foreign_sfzh
+GROUP BY r.yunnan_sfzh
+HAVING COUNT(DISTINCT f.guo_ji) >= 2;",,
+23,筛选出落身份证号53280119530404022X的居住场所、工作场所和流动场所的落脚点,ywk_ywsck_ryhdglsj_001_lhcz_ai_model_test;ywk_sc_latest_trace_sx_2001_lhcz_ai_model_test,"SELECT * from 
+(select *,
+row_number() over(partition by zjhm,dwbq order by dwmc_ts desc,dwmc_pc desc)  as row_num 
+from ywk_ywsck_ryhdglsj_001_lhcz_ai_model_test 
+where zjhm = '53280119530404022X' and dwbq in ('居住场所','工作场所','流动场所') ) a
+WHERE a.row_num=1;",,
+24,统计未来三年530地区的危安类刑满释放人员数量，同时统计出刑期在10年及以上的人数，以及涉嫌组织、参加恐怖组织的人数。,mxgl_ywk_jysj_jgsj_huizong_lhcz_ai_model_test;ywk_sc_czrkjbxx_zhenghe_2001_lhcz_ai_model_test,"SELECT
+    sfzh AS 身份证号,
+    xm AS 姓名,
+    hjdz AS 户籍地址,
+    zmmc AS 罪名,
+    xq AS 刑期,
+    xq_zr AS 释放日期,
+    jsmc AS 监所名称,
+    CASE WHEN zmmc LIKE '%恐怖组织%' THEN '是' ELSE '否' END AS 是否恐怖组织,
+    CASE WHEN CAST(REGEXP_EXTRACT(xq, '(\d+)年', 1) AS INT) >= 10 THEN '是' ELSE '否' END AS 刑期10年以上
+FROM mxgl_ywk_jysj_jgsj_huizong_lhcz_ai_model_test
+WHERE if_wa = '是'
+  AND (hjdz LIKE '云南省%' OR sfzh LIKE '53%')
+  AND xq_zr >= '2026-01-15'
+  AND xq_zr <= '2029-01-15'
+ORDER BY xq_zr;",,
+25,筛选出出滇人员中有可疑活动的人有哪些?,lhcz_qy_jcmx_wabq_result_lhcz_ai_model_test;lhcz_zyp_glcjrj_result_lhcz_ai_model_test;ywk_sc_sj_gjzh_new_1_dd_2001_lhcz_ai_model_test;ywk_sc_real_estate_transaction_lhcz_ai_model_test,"WITH temp AS (
+    SELECT DISTINCT zheng_jian_hao sfzh,message
+    FROM ywk_sc_sj_gjzh_new_1_dd_2001_lhcz_ai_model_test
+    WHERE huo_dong_kai_shi_di_zip_code LIKE '53%' and 
+    huo_dong_jie_shu_di_zip_code not LIKE '53%' and dt >= replace(ADD_MONTHS(GETDATE(), -12),'-','')
+)
+    SELECT DISTINCT t2.sfzh,t2.message,t1.qbidhz kyxw
+    FROM lhcz_qy_jcmx_wabq_result_lhcz_ai_model_test t1
+    JOIN temp t2
+    ON t1.sfzh = t2.sfzh;",,
+26,人员 530103199906060050 及家族成员中有哪些是涉案线人员,ywk_sc_ztk_huji_hunyin_zhenghe_guanxi_2001_lhcz_ai_model_test;mxgl_ztk_sasx_zhenghe_ql_lhcz_ai_model_test,"WITH temp AS (
+    SELECT DISTINCT hu_hao_id
+    FROM ywk_sc_ztk_huji_hunyin_zhenghe_guanxi_2001_lhcz_ai_model_test
+    WHERE sfzh = '530103199906060050'
+),temp2 AS (
+    SELECT DISTINCT sfzh
+    FROM ywk_sc_ztk_huji_hunyin_zhenghe_guanxi_2001_lhcz_ai_model_test t1
+    JOIN temp t2
+    ON t1.hu_hao_id = t2.hu_hao_id
+),temp3 AS (
+    SELECT t1.*
+    FROM mxgl_ztk_sasx_zhenghe_ql_lhcz_ai_model_test t1
+    JOIN temp2 t2
+    ON t1.sfzh = t2.sfzh
+)SELECT *
+FROM temp3;",,
+27,筛选在押收押人员中存在身份轨迹的人员,mxgl_ywk_jysj_jgsj_final_lhcz_ai_model_test;ywk_sc_sj_gjzh_new_1_dd_2001_lhcz_ai_model_test,"WITH temp AS
+(
+    SELECT  DISTINCT sfzh
+    FROM    mxgl_ywk_jysj_jgsj_final_lhcz_ai_model_test
+    WHERE   ryzt = '在押' OR ryzt = '收押'
+),temp2 AS (
+    SELECT t1.*
+    FROM ywk_sc_sj_gjzh_new_1_dd_2001_lhcz_ai_model_test t1
+    JOIN temp t2
+    ON t1.zheng_jian_hao = t2.sfzh
+)SELECT *
+FROM temp2;",,
+28,有没有重点人存在聚集的情况?,ywk_ywsck_ryhdglsj_001_lhcz_ai_model_test;ywk_sc_skry_12lei_zhenghe_01_lhcz_ai_model_test;ywk_sc_txtzmxzhesb_20_lhcz_ai_model_test,"
+WITH sfzh_hj AS
+(
+    SELECT  b.sfzh,SUBSTR(hu_ji_di_pai_chu_suo_bian_ma,1,4) sfzh_hj
+    FROM    ywk_sc_czrkjbxx_zhenghe_2001_lhcz_ai_model_test a join
+    ywk_sc_skry_12lei_zhenghe_01_lhcz_ai_model_test b
+    on a.gong_min_shen_fen_hao_ma = b.sfzh
+    WHERE    hu_ji_di_pai_chu_suo_bian_ma IS NOT NULL
+    UNION
+    SELECT  b.sfzh,REGEXP_EXTRACT(xq,'行政区划代码：(\\d{4})',1) sfzh_hj
+    FROM    ywk_ywsck_ryhdglsj_001_lhcz_ai_model_test a join
+    ywk_sc_skry_12lei_zhenghe_01_lhcz_ai_model_test b
+    on a.zjhm = b.sfzh
+    WHERE   dwbq = '居住场所'
+    AND     REGEXP_EXTRACT(xq,'行政区划代码：(\\d{4})',1) IS NOT NULL
+    AND     REGEXP_EXTRACT(xq,'行政区划代码：(\\d{4})',1) <> ''
+)
+,gxr_sfzh_hj AS
+(
+    SELECT  b.sfzh,SUBSTR(hu_ji_di_pai_chu_suo_bian_ma,1,4) sfzh_hj
+    FROM    ywk_sc_czrkjbxx_zhenghe_2001_lhcz_ai_model_test a join
+    ywk_sc_skry_12lei_zhenghe_01_lhcz_ai_model_test b on a.gong_min_shen_fen_hao_ma = b.sfzh
+    WHERE   hu_ji_di_pai_chu_suo_bian_ma IS NOT NULL
+    UNION
+    SELECT  b.sfzh,REGEXP_EXTRACT(xq,'行政区划代码：(\\d{4})',1) sfzh_hj
+    FROM    ywk_ywsck_ryhdglsj_001_lhcz_ai_model_test a join
+    ywk_sc_skry_12lei_zhenghe_01_lhcz_ai_model_test b on a.zjhm = b.sfzh
+    WHERE     dwbq = '居住场所'
+    AND     REGEXP_EXTRACT(xq,'行政区划代码：(\\d{4})',1) IS NOT NULL
+    AND     REGEXP_EXTRACT(xq,'行政区划代码：(\\d{4})',1) <> ''
+)
+,airplane_cross AS
+(
+    SELECT  a.sfzh
+            ,b.sfzh gxr_sfzh
+            ,a.fa_che_zhan cfd
+            ,a.dao_zhan ddd
+            ,a.cfd_xzqh
+            ,a.ddd_xzqh
+            ,a.cheng_che_ri_qi cfsj
+            ,a.dao_da_ri_qi ddsj
+    FROM    (
+                SELECT  a.*
+                FROM    dws_ztk_airplane_trace_lhcz_ai_model_test a join
+                ywk_sc_skry_12lei_zhenghe_01_lhcz_ai_model_test b on a.sfzh = b.sfzh
+                join sfzh_hj c on a.sfzh = c.sfzh
+                WHERE   dt >= replace(ADD_MONTHS(GETDATE(), -12),'-','') ------时间
+                AND     SUBSTR(ddd_xzqh,1,4) != c.sfzh_hj
+                AND     SUBSTR(cfd_xzqh,1,4) != c.sfzh_hj
+            ) a
+    JOIN    (
+                SELECT  a.*
+                FROM    dws_ztk_airplane_trace_lhcz_ai_model_test a join
+                ywk_sc_skry_12lei_zhenghe_01_lhcz_ai_model_test b on a.sfzh = b.sfzh
+                join gxr_sfzh_hj c on a.sfzh = c.sfzh
+                WHERE   dt >= replace(ADD_MONTHS(GETDATE(), -12),'-','') ------时间
+                AND     SUBSTR(ddd_xzqh,1,4) != c.sfzh_hj
+                AND     SUBSTR(cfd_xzqh,1,4) != c.sfzh_hj
+            ) b
+    ON      a.id = b.id
+    WHERE   a.sfzh <> b.sfzh
+)
+,train_cross AS
+(
+    SELECT  a.sfzh
+            ,b.sfzh gxr_sfzh
+            ,a.fa_che_zhan cfd
+            ,a.dao_zhan ddd
+            ,a.cfd_xzqh
+            ,a.ddd_xzqh
+            ,a.cheng_che_ri_qi cfsj
+            ,a.cheng_che_ri_qi ddsj
+    FROM    (
+                SELECT  a.*
+                FROM    dws_ztk_train_trace_lhcz_ai_model_test a join
+                ywk_sc_skry_12lei_zhenghe_01_lhcz_ai_model_test b on a.sfzh = b.sfzh
+                join sfzh_hj c on a.sfzh = c.sfzh
+                WHERE   dt >= replace(ADD_MONTHS(GETDATE(), -12),'-','') ------时间
+                AND     SUBSTR(ddd_xzqh,1,4) != c.sfzh_hj
+                AND     SUBSTR(cfd_xzqh,1,4) != c.sfzh_hj
+            ) a
+    JOIN    (
+                SELECT  a.*
+                FROM    dws_ztk_train_trace_lhcz_ai_model_test a join
+                ywk_sc_skry_12lei_zhenghe_01_lhcz_ai_model_test b on a.sfzh = b.sfzh
+                join gxr_sfzh_hj c on a.sfzh = c.sfzh
+                WHERE   dt >= replace(ADD_MONTHS(GETDATE(), -12),'-','') ------时间
+                AND     SUBSTR(ddd_xzqh,1,4) != c.sfzh_hj
+                AND     SUBSTR(cfd_xzqh,1,4) != c.sfzh_hj
+            ) b
+    ON      a.id = b.id
+)
+,hotel_together AS
+(
+    SELECT  a.zheng_jian_hao_ma AS sfzh
+            ,b.zheng_jian_hao_ma AS gxr_sfzh
+            ,a.lv_guan_ming_cheng AS cfd
+            ,a.lv_guan_ming_cheng AS ddd
+            ,a.lv_guan_bian_ma AS cfd_xzqh
+            ,a.lv_guan_bian_ma AS ddd_xzqh
+            ,a.ru_zhu_shi_jian cfsj
+            ,a.ru_zhu_shi_jian ddsj
+    FROM    (
+                SELECT  a.*
+                FROM    ztk_check_inout_hotel_lhcz_ai_model_test a join
+                ywk_sc_skry_12lei_zhenghe_01_lhcz_ai_model_test b on a.zheng_jian_hao_ma = b.sfzh
+                join sfzh_hj c on a.zheng_jian_hao_ma = c.sfzh
+                WHERE   dt >= replace(ADD_MONTHS(GETDATE(), -12),'-','') ------时间
+                AND     SUBSTR(lv_guan_bian_ma,1,4) != c.sfzh_hj
+                AND     lv_guan_bian_ma IS NOT NULL
+                AND     lv_guan_bian_ma <> ''
+                AND     lv_guan_bian_ma <> '未知'
+            ) a
+    JOIN    (
+                SELECT  a.*
+                FROM    ztk_check_inout_hotel_lhcz_ai_model_test a join
+                ywk_sc_skry_12lei_zhenghe_01_lhcz_ai_model_test b on a.zheng_jian_hao_ma = b.sfzh
+                join gxr_sfzh_hj c on a.zheng_jian_hao_ma = c.sfzh
+                WHERE   dt >= replace(ADD_MONTHS(GETDATE(), -12),'-','') ------时间
+                AND     SUBSTR(lv_guan_bian_ma,1,4) != c.sfzh_hj
+                AND     lv_guan_bian_ma IS NOT NULL
+                AND     lv_guan_bian_ma <> ''
+                AND     lv_guan_bian_ma <> '未知'
+            ) b
+    ON      a.id_no = b.id_no
+    AND     a.room_id = b.room_id
+)
+,dg_cross AS
+(
+    SELECT  t1.zjhm AS sfzh
+            ,t2.zjhm AS gxr_sfzh
+            ,t2.dian_wei_ming_chen AS cfd
+            ,t2.dian_wei_ming_chen AS ddd
+            ,t2.id AS cfd_xzqh
+            ,t2.id AS ddd_xzqh
+            ,t2.collecttime AS cfsj
+            ,t2.collecttime AS ddsj
+    FROM    (
+                SELECT  DISTINCT zjhm
+                        ,a.xm
+                        ,dz
+                        ,qx
+                        ,dian_wei_ming_chen
+                        ,collecttime
+                        ,id
+                FROM    ywk_sc_dgz_dg_ry_zh_new_2001_lhcz_ai_model_test a join
+                ywk_sc_skry_12lei_zhenghe_01_lhcz_ai_model_test b on a.zjhm = b.sfzh
+                join sfzh_hj c on a.zjhm = c.sfzh
+                WHERE   dt >= replace(ADD_MONTHS(GETDATE(), -12),'-','') ------时间
+                AND     SUBSTR(id,1,4) != c.sfzh_hj
+            ) t1
+    JOIN    (
+                SELECT  DISTINCT zjhm
+                        ,a.xm
+                        ,dz
+                        ,qx
+                        ,dian_wei_ming_chen
+                        ,collecttime
+                        ,id
+                FROM    ywk_sc_dgz_dg_ry_zh_new_2001_lhcz_ai_model_test a join
+                ywk_sc_skry_12lei_zhenghe_01_lhcz_ai_model_test b on a.zjhm = b.sfzh
+                join gxr_sfzh_hj c on a.zjhm = c.sfzh
+                WHERE   dt >= replace(ADD_MONTHS(GETDATE(), -12),'-','') ------时间
+                AND     SUBSTR(id,1,4) != c.sfzh_hj
+            ) t2
+    ON      t1.id = t2.id
+    AND     ABS(DATEDIFF(CAST(t1.collecttime AS DATETIME),CAST(t2.collecttime AS DATETIME),'ss')) <= 10
+)
+SELECT  DISTINCT sfzh
+        ,gxr_sfzh
+        ,cfd
+        ,ddd
+        ,cfd_xzqh
+        ,ddd_xzqh
+        ,cfsj
+        ,ddsj
+        ,type
+FROM    (
+            SELECT  sfzh
+                    ,gxr_sfzh
+                    ,cfd
+                    ,ddd
+                    ,cfd_xzqh
+                    ,ddd_xzqh
+                    ,cfsj
+                    ,ddsj
+                    ,'飞机同行' type
+            FROM    airplane_cross
+            UNION ALL
+            SELECT  sfzh
+                    ,gxr_sfzh
+                    ,cfd
+                    ,ddd
+                    ,cfd_xzqh
+                    ,ddd_xzqh
+                    ,cfsj
+                    ,ddsj
+                    ,'火车同行' type
+            FROM    train_cross
+            UNION ALL
+            SELECT  sfzh
+                    ,gxr_sfzh
+                    ,cfd
+                    ,ddd
+                    ,cfd_xzqh
+                    ,ddd_xzqh
+                    ,cfsj
+                    ,ddsj
+                    ,'地感同行' type
+            FROM    dg_cross
+            UNION ALL
+            SELECT  sfzh
+                    ,gxr_sfzh
+                    ,cfd
+                    ,ddd
+                    ,cfd_xzqh
+                    ,ddd_xzqh
+                    ,cfsj
+                    ,ddsj
+                    ,'同住' type
+            FROM    hotel_together
+        ) r
+;",,
+29,证件号为 532501198006150145 的人员所在单位是否有标签人员或可疑上网行为人员？,lhcz_wx_jcmx_zhiye_zhenghe_lhcz_ai_model_test;ywk_sc_skry_12lei_zhenghe_01_lhcz_ai_model_test;lhcz_qy_jcmx_wabq_result_lhcz_ai_model_test,"WITH temp AS (
+    select DISTINCT gzdw
+    FROM lhcz_wx_jcmx_zhiye_zhenghe_lhcz_ai_model_test
+    where sfzh = '532501198006150145'
+),temp2 AS (
+    SELECT DISTINCT sfzh
+    FROM lhcz_wx_jcmx_zhiye_zhenghe_lhcz_ai_model_test t1
+    JOIN temp t2
+    ON t1.gzdw = t2.gzdw
+),temp3 AS (
+    SELECT DISTINCT t2.sfzh,t1.rylbmc
+    FROM ywk_sc_skry_12lei_zhenghe_01_lhcz_ai_model_test t1
+    JOIN temp2 t2
+    ON t1.sfzh = t2.sfzh
+    UNION
+    select DISTINCT t2.sfzh,t1.rylb rylbmc
+    FROM lhcz_qy_jcmx_wabq_result_lhcz_ai_model_test t1
+    JOIN temp2 t2
+    ON t1.sfzh = t2.sfzh
+)SELECT DISTINCT *
+FROM temp3;
+",,
+30,身份证为 533401198509090266 人员是否与关系人一同出入境,ywk_sc_crjglxt_sj_crjjl_sfxx_ql_2001_lhcz_ai_model_test;ywk_sc_ztk_huji_hunyin_zhenghe_guanxi_2001_lhcz_ai_model_test,1,1,"上次修改了关系人的关联表
+1. ywk_sc_txtzmxzhesb_20_lhcz_ai_model_test 
+2. ywk_sc_ztk_huji_hunyin_zhenghe_guanxi_2001_lhcz_ai_model_test
+
+但目前给到的SQL用的依然是家族关系表"
+31,身份证 330106199409110426 的人员的关系人员(去除亲属)中是否存在涉同案、同宗教图谱人员；,ywk_sc_txtzmxzhesb_20_lhcz_ai_model_test;mxgl_ztk_sasx_zhenghe_ql_lhcz_ai_model_test;mxgl_zc_0214_lztury_lhcz_ai_model_test,"WITH
+  s1 AS (
+    SELECT
+      gong_min_shen_fen_hao_ma,
+      xing_ming
+    FROM
+      ywk_sc_czrkjbxx_zhenghe_2001_lhcz_ai_model_test
+    WHERE
+      gong_min_shen_fen_hao_ma = '330106199409110426'
+  ),
+  s2 AS (
+    SELECT
+      gxr_sfzh
+    FROM
+      ywk_sc_txtzmxzhesb_20_lhcz_ai_model_test
+    WHERE
+      sfzh = '330106199409110426'
+  ),
+  s3 AS (
+    SELECT
+      r.gxr_sfzh
+    FROM
+      s2 AS r
+      LEFT JOIN ywk_sc_ztk_huji_hunyin_zhenghe_guanxi_2001_lhcz_ai_model_test AS f ON r.gxr_sfzh = f.sfzh
+    WHERE
+      f.sfzh IS NULL
+  ),
+  s4 AS (
+    SELECT DISTINCT
+    '同案线' lx,
+      t.ajxsbh,
+      t.ajxsmc,
+      t.sfzh AS suspect_idcard,
+      t2.sfzh AS co_suspect_idcard
+    FROM
+      mxgl_ztk_sasx_zhenghe_ql_lhcz_ai_model_test AS t
+      JOIN s3 AS r ON t.sfzh = r.gxr_sfzh
+      JOIN mxgl_ztk_sasx_zhenghe_ql_lhcz_ai_model_test AS t2 ON t.ajxsbh = t2.ajxsbh
+      AND t2.sfzh <> t.sfzh
+    WHERE
+      t2.sfzh IN (
+        SELECT
+          gxr_sfzh
+        FROM
+          s3
+      )
+  ),
+  s5 AS (
+    SELECT DISTINCT
+    '同图谱' lx,
+      t1.tpcode,
+      t1.tpname,
+      t1.idcard AS person_idcard,
+      t2.idcard AS related_idcard
+    FROM
+      mxgl_zc_0214_lztury_lhcz_ai_model_test AS t1
+      left JOIN mxgl_zc_0214_lztury_lhcz_ai_model_test AS t2 ON t1.tpcode = t2.tpcode
+      left JOIN s3 AS r ON t2.idcard = r.gxr_sfzh
+    WHERE
+      t1.idcard = '330106199409110426'
+      AND t1.idcard <> t2.idcard
+  )
+SELECT
+  *
+FROM
+  s5 union select * from s4;",,
+32,不同地区两名及两名以上涉同一宗教图谱人员，在滇内某地存在同行、同住、同wifi、设备同行等情况。,mxgl_zc_0214_lztury_lhcz_ai_model_test;ywk_sc_czrkjbxx_zhenghe_2001_lhcz_ai_model_test;dws_ztk_airplane_trace_lhcz_ai_model_test;dws_ztk_train_trace_lhcz_ai_model_test;dws_ztk_coach_trace_lhcz_ai_model_test;ztk_check_inout_hotel_lhcz_ai_model_test;lhcz_ghm_twifi_sfzh_results_lhcz_ai_model_test;lhcz_qy_sk_geohash_sbtx_cardno_result_lhcz_ai_model_test,"
+
+--不同地区两名及两名以上涉同一宗教图谱人员，在滇内某地存在同行、同住、同wifi、设备同行等情况。
+
+
+WITH religion_people AS (
+    -- 1. 宗教图谱人员
+    SELECT
+        tpcode,
+        tpname,
+        idcard AS sfzh
+    FROM mxgl_zc_0214_lztury_lhcz_ai_model_test
+    WHERE tptype_name = '宗教极端思想传承图'
+      AND idcard IS NOT NULL
+),
+people_region AS (
+    -- 2. 人员所属地区
+    SELECT
+        gong_min_shen_fen_hao_ma AS sfzh,
+        sheng_shi_xian_qu_ming_cheng AS region_name,
+        SUBSTR(sheng_shi_xian_qu, 1, 4) AS region_code
+    FROM ywk_sc_czrkjbxx_zhenghe_2001_lhcz_ai_model_test
+),
+
+religion_multi_region AS (
+    -- 3. 同一宗教图谱 + 不同地区（≥2人）
+    SELECT
+        r.tpcode,
+        r.tpname
+    FROM religion_people r
+    JOIN people_region p
+      ON r.sfzh = p.sfzh
+    GROUP BY r.tpcode, r.tpname
+    HAVING COUNT(DISTINCT p.region_name) >= 2
+),
+
+target_people AS (
+    -- 4. 最终目标人员集合
+    SELECT
+        r.tpcode,
+        r.tpname,
+        r.sfzh,
+        p.region_name
+    FROM religion_people r
+    JOIN religion_multi_region m
+      ON r.tpcode = m.tpcode
+     AND r.tpname = m.tpname
+    JOIN people_region p
+      ON r.sfzh = p.sfzh
+),
+
+同行 AS (
+    -- 5. 滇内同行（飞机 / 火车 / 客运）
+    SELECT DISTINCT sfzh, id AS event_id, '同行' AS behavior_type
+    FROM dws_ztk_airplane_trace_lhcz_ai_model_test
+    WHERE SUBSTR(cfd_xzqh,1,2) = '53'
+       OR SUBSTR(ddd_xzqh,1,2) = '53'
+
+    UNION ALL
+
+    SELECT DISTINCT sfzh, tcx_id AS event_id, '同行'
+    FROM dws_ztk_train_trace_lhcz_ai_model_test
+    WHERE tcx_id IS NOT NULL
+      AND SUBSTR(cfd_xzqh,1,2) = '53'
+
+    UNION ALL
+
+    SELECT DISTINCT sfzh, che_ci AS event_id, '同行'
+    FROM dws_ztk_coach_trace_lhcz_ai_model_test
+    WHERE SUBSTR(cfz,1,2) = '53'
+),
+
+同住 AS (
+    -- 6. 滇内同住
+    SELECT DISTINCT
+        zheng_jian_hao_ma AS sfzh,
+        room_id AS event_id,
+        '同住' AS behavior_type
+    FROM ztk_check_inout_hotel_lhcz_ai_model_test
+    WHERE room_id IS NOT NULL
+),
+
+同wifi AS (
+    -- 7. 同 WIFI
+    SELECT DISTINCT
+        sfzh,
+        bssid AS event_id,
+        '同WIFI' AS behavior_type
+    FROM lhcz_ghm_twifi_sfzh_results_lhcz_ai_model_test
+),
+
+设备同行 AS (
+    -- 8. 设备同行
+    SELECT DISTINCT
+        zjhm AS sfzh,
+        device_tx_xq AS event_id,
+        '设备同行' AS behavior_type
+    FROM lhcz_qy_sk_geohash_sbtx_cardno_result_lhcz_ai_model_test
+),
+
+all_behavior AS (
+    SELECT * FROM 同行
+    UNION ALL SELECT * FROM 同住
+    UNION ALL SELECT * FROM 同wifi
+    UNION ALL SELECT * FROM 设备同行
+)
+
+-- 9. 最终结果
+SELECT
+    t.tpcode,
+    t.tpname,
+    t.sfzh,
+    t.region_name,
+    b.behavior_type,
+    b.event_id
+FROM target_people t
+JOIN all_behavior b
+  ON t.sfzh = b.sfzh;
+",1,
+33,境外涉恐人员、出境长期未归人员、涉恶人员、出境后变换国籍等人员的同行同住或同家族境内关系人使用异常应用(APP)情况。,ywk_sc_skry_12lei_zhenghe_01_lhcz_ai_model_test;dws_ztk_airplane_trace_lhcz_ai_model_test;dws_ztk_train_trace_lhcz_ai_model_test;dws_ztk_coach_trace_lhcz_ai_model_test;ztk_check_inout_hotel_lhcz_ai_model_test;ywk_sc_dsr_ztk_jzgx_chonggou_final_result_2001_lhcz_ai_model_test;nb_app_bqhz_lhcz_ai_model_test,"WITH base_key_person AS (
+    -- 1. 境外涉K / 反宣 / 出境类重点人
+    SELECT DISTINCT
+        sfzh,rylbmc
+    FROM ywk_sc_skry_12lei_zhenghe_01_lhcz_ai_model_test
+    WHERE
+        rylbmc in 
+    ('涉恐人员','涉恶人员')
+),
+同行同住人员 AS (
+    select distinct b.sfzh,b.rylbmc,a.gxr_sfzh 
+    from ywk_sc_txtzmxzhesb_20_lhcz_ai_model_test a 
+    join base_key_person b on a.sfzh = b.sfzh
+),
+同家族人员 AS (
+    -- 4. 同家族关系人
+    SELECT DISTINCT j1.sfzh,j3.rylbmc,j2.sfzh AS rel_sfzh
+    FROM ywk_sc_dsr_ztk_jzgx_chonggou_final_result_2001_lhcz_ai_model_test j1
+    JOIN ywk_sc_dsr_ztk_jzgx_chonggou_final_result_2001_lhcz_ai_model_test j2
+      ON j1.jiazu_id = j2.jiazu_id
+    join base_key_person j3 on j1.sfzh = j3.sfzh
+    WHERE j1.sfzh IN (SELECT sfzh FROM base_key_person)
+      AND j2.sfzh <> j1.sfzh
+),
+
+关系人汇总 AS (
+    select sfzh,rylbmc,gxr_sfzh rel_sfzh from 同行同住人员
+    UNION
+    SELECT sfzh,rylbmc,rel_sfzh FROM 同家族人员
+)
+
+-- 5. 关系人境内异常 APP 使用情况
+SELECT
+r.sfzh as 身份证号,
+r.rylbmc as 人员类别名称,
+    r.rel_sfzh                AS 关系人身份证号,
+    a.chinese_name            AS 异常APP名称,
+    a.package_type            AS APP标签类型,
+    a.shi_jian_chuo           AS 使用时间
+FROM 关系人汇总 r
+JOIN nb_app_bqhz_lhcz_ai_model_test a
+  ON r.rel_sfzh = a.shou_ji_hao_ma
+;",,
+34,与米热孜·阿米娜跨区聚集的人员有哪些。,ywk_sc_czrkjbxx_zhenghe_2001_lhcz_ai_model_test;dws_ztk_airplane_trace_lhcz_ai_model_test;dws_ztk_train_trace_lhcz_ai_model_test;dws_ztk_coach_trace_lhcz_ai_model_test,"WITH target_person AS (
+    SELECT
+        gong_min_shen_fen_hao_ma AS sfzh,
+        xing_ming
+    FROM ywk_sc_czrkjbxx_zhenghe_2001_lhcz_ai_model_test
+    WHERE xing_ming = '米热孜·阿米娜'
+),
+airplane_cross AS (
+    SELECT
+        a.id,
+        a.sfzh,
+        a.name
+    FROM dws_ztk_airplane_trace_lhcz_ai_model_test a
+    WHERE a.id IN (
+            SELECT distinct id
+            FROM dws_ztk_airplane_trace_lhcz_ai_model_test t1 join 
+            target_person t2 on t1.sfzh = t2.sfzh
+            WHERE substr(cfd_xzqh,1,4) <> substr(ddd_xzqh,1,4)
+        )
+    and a.sfzh not in (select sfzh from target_person)
+),
+
+train_cross AS (
+    SELECT
+        a.id,
+        a.sfzh,
+        a.name
+    FROM dws_ztk_train_trace_lhcz_ai_model_test a
+    WHERE a.id IN (
+            SELECT distinct id
+            FROM dws_ztk_train_trace_lhcz_ai_model_test t1 join 
+            target_person t2 on t1.sfzh = t2.sfzh
+            WHERE substr(cfd_xzqh,1,4) <> substr(ddd_xzqh,1,4)
+        )
+    and a.sfzh not in (select sfzh from target_person)
+)
+SELECT DISTINCT
+    sfzh,
+    name
+FROM (
+    SELECT sfzh, name FROM airplane_cross
+    UNION ALL
+    SELECT sfzh, name FROM train_cross
+) r;""
+
+",1,
+35,2025年3月到4月期间浏览问题歌曲、可疑URL的人员，他们目前活动轨迹在哪里，并标识出特群？,lhcz_qy_jcmx_wabq_result_lhcz_ai_model_test;ywk_sc_latest_trace_sx_2001_lhcz_ai_model_test;ywk_sc_skry_12lei_zhenghe_01_lhcz_ai_model_test,"WITH wabq_hit_person AS (
+    -- ① 2025年3-4月期间，浏览问题歌曲 / 可疑URL 的人员
+    SELECT DISTINCT
+        sfzh
+    FROM lhcz_qy_jcmx_wabq_result_lhcz_ai_model_test
+    WHERE sj >= '2025-03-01 00:00:00'
+      AND sj <  '2025-05-01 00:00:00'
+      and rylb in ('访问url情况','问题歌曲及书籍')
+),
+latest_trace AS (
+    -- ② 命中人员的最新活动轨迹
+    SELECT
+        zhengjianhao AS sfzh,
+        huodongkaishishi_jian,
+        huodongjieshushi_jian,
+        guijiwei_zhi
+    FROM ywk_sc_latest_trace_sx_2001_lhcz_ai_model_test
+),
+special_group AS (
+    -- ③ 12类重点人（特群）标识
+    SELECT DISTINCT
+        sfzh,
+        rylbmc
+    FROM ywk_sc_skry_12lei_zhenghe_01_lhcz_ai_model_test
+)
+
+SELECT
+    p.sfzh                                   AS 身份证号,
+    t.guijiwei_zhi                           AS 当前轨迹位置,
+    t.huodongkaishishi_jian                 AS 活动开始时间,
+    t.huodongjieshushi_jian                 AS 活动结束时间,
+    CASE
+        WHEN s.sfzh IS NOT NULL THEN '是'
+        ELSE '否'
+    END                                      AS 是否特群,
+    s.rylbmc                                AS 特群类别
+FROM wabq_hit_person p
+LEFT JOIN latest_trace t
+    ON p.sfzh = t.sfzh
+LEFT JOIN special_group s
+    ON p.sfzh = s.sfzh;",,
+36,身份证号为 530102197505200010 及其家族圈人员的关系人中是否存在境外出境未归及境外活动人员。,ywk_sc_crj_xj_cjwg_df_2001_lhcz_ai_model_test;ywk_sc_txtzmxzhesb_20_lhcz_ai_model_test;ywk_sc_czrkjbxx_zhenghe_2001_lhcz_ai_model_test;ywk_sc_dsr_ztk_jzgx_chonggou_final_result_2001_lhcz_ai_model_test,"WITH family_members AS (
+    -- 1. 家族圈人员
+    SELECT DISTINCT sfzh
+    FROM ywk_sc_dsr_ztk_jzgx_chonggou_final_result_2001_lhcz_ai_model_test
+    WHERE jiazu_id IN (
+        SELECT jiazu_id
+        FROM ywk_sc_dsr_ztk_jzgx_chonggou_final_result_2001_lhcz_ai_model_test
+        WHERE sfzh = '530102199408201256'
+    )
+),
+relation_person AS (
+    -- 2. 关系人（同行 / 同住 / 告警 / 布控等）
+    SELECT DISTINCT
+        t.sfzh        AS source_sfzh,
+        r.gxr_sfzh    AS relation_sfzh
+    FROM family_members t
+    JOIN ywk_sc_txtzmxzhesb_20_lhcz_ai_model_test r
+      ON t.sfzh = r.sfzh
+),
+
+risk_relation AS (
+    -- 3. 命中境外出境未归 / 境外活动人员
+    SELECT
+        rp.source_sfzh,
+        rp.relation_sfzh,
+        c.xing_ming,
+        c.guo_ji,
+        c.qian_wang_guo_jia,
+        c.chu_ru_jing_biao_shi,
+        c.chu_ru_jing_shi_jian_1
+    FROM relation_person rp
+    JOIN ywk_sc_crj_xj_cjwg_df_2001_lhcz_ai_model_test c
+      ON rp.relation_sfzh = c.sfzh
+    WHERE c.chu_ru_jing_biao_shi = '出境'
+)
+SELECT
+    source_sfzh        AS 关联源人员身份证,
+    relation_sfzh      AS 风险关系人身份证,
+    xing_ming          AS 姓名,
+    guo_ji             AS 国籍,
+    qian_wang_guo_jia  AS 前往国家,
+    chu_ru_jing_shi_jian_1 AS 最近出境时间
+FROM risk_relation;",1,
+37,身份证号为 530102199003151238 及其家族圈人员的关系人中是否存在曾因同一案件被打击处理人员。,mxgl_ywk_jysj_jgsj_huizong_lhcz_ai_model_test;ywk_sc_txtzmxzhesb_20_lhcz_ai_model_test;ywk_sc_czrkjbxx_zhenghe_2001_lhcz_ai_model_test;ywk_sc_dsr_ztk_jzgx_chonggou_final_result_2001_lhcz_ai_model_test,"WITH target_family AS (
+    -- 1. 获取目标人员的家族圈人员
+    SELECT DISTINCT
+        f.sfzh
+    FROM ywk_sc_dsr_ztk_jzgx_chonggou_final_result_2001_lhcz_ai_model_test f
+    WHERE f.jiazu_id IN (
+        SELECT jiazu_id
+        FROM ywk_sc_dsr_ztk_jzgx_chonggou_final_result_2001_lhcz_ai_model_test
+        WHERE sfzh = '53250219760211015X'
+    ) and f.sfzh <> '53250219760211015X'
+),
+
+family_relations AS (
+    -- 2. 家族圈人员的关系人
+    SELECT DISTINCT
+        t.gxr_sfzh AS sfzh
+    FROM ywk_sc_txtzmxzhesb_20_lhcz_ai_model_test t
+    JOIN target_family f
+      ON t.sfzh = f.sfzh
+      where f.sfzh != t.gxr_sfzh
+),
+
+all_related_persons AS (
+    -- 3. 合并：本人 + 家族圈 + 家族关系人
+    SELECT '53250219760211015X' AS sfzh
+    UNION
+    SELECT sfzh FROM target_family
+    UNION
+    SELECT sfzh FROM family_relations
+),
+
+case_info AS (
+    -- 4. 关联监所案件信息
+    SELECT
+        sfzh,
+        ajlxmc,
+        zmmc
+    FROM mxgl_ywk_jysj_jgsj_huizong_lhcz_ai_model_test
+    WHERE sfzh IN (SELECT sfzh FROM all_related_persons)
+)
+
+-- 5. 判断是否存在“同一案件被打击处理”的情况
+SELECT
+    a.sfzh       AS 人员身份证号,
+    a.ajlxmc     AS 案件类型名称,
+    a.zmmc       AS 罪名名称,
+    COUNT(*)     AS 涉案人数
+FROM case_info a
+GROUP BY
+    a.ajlxmc,
+    a.zmmc,
+    a.sfzh
+HAVING COUNT(*) >= 1;
+",,
+38,来自于两个及两个以上国家的外籍人员，同一时间段内在同一地点或同一wifi下聚集，或在同一时间段内在昆明市内活动点位有多次重复。,ywk_sc_crjglxt_sj_crjjl_sfxx_ql_2001_lhcz_ai_model_test;lhcz_ghm_twifi_sfzh_results_lhcz_ai_model_test;ywk_sc_dgz_dg_ry_zh_new_2001_lhcz_ai_model_test,"WITH foreign_person AS (
+    -- 外籍人员基础信息
+    SELECT DISTINCT
+        sfzh,
+        guo_ji
+    FROM ywk_sc_crjglxt_sj_crjjl_sfxx_ql_2001_lhcz_ai_model_test
+    WHERE guo_ji IS NOT NULL and guo_ji not in ('中国','中国香港','中国澳门')
+),
+
+wifi_group AS (
+    -- 同一时间段、同一 WIFI 聚集
+    SELECT
+        w.bssid,
+        w.ssid,
+        date_format(CAST(w.min_time AS TIMESTAMP), 'yyyy-MM-dd HH') AS time_slot,
+        COUNT(DISTINCT f.guo_ji) AS country_cnt,
+        COUNT(DISTINCT w.sfzh) AS person_cnt
+    FROM lhcz_ghm_twifi_sfzh_results_lhcz_ai_model_test w
+    JOIN foreign_person f
+        ON w.sfzh = f.sfzh
+    GROUP BY
+        w.bssid,
+        w.ssid,
+        date_format(CAST(w.min_time AS TIMESTAMP), 'yyyy-MM-dd HH')
+    HAVING
+        COUNT(DISTINCT f.guo_ji) >= 2
+        AND COUNT(DISTINCT w.sfzh) >= 2
+),
+
+place_group AS (
+    -- 同一时间段、同一地点聚集
+    SELECT
+        d.dian_wei_ming_chen,
+        date_format(CAST(d.collecttime AS TIMESTAMP), 'yyyy-MM-dd HH') AS time_slot,
+        COUNT(DISTINCT f.guo_ji) AS country_cnt,
+        COUNT(DISTINCT d.zjhm) AS person_cnt
+    FROM ywk_sc_dgz_dg_ry_zh_new_2001_lhcz_ai_model_test d
+    JOIN foreign_person f
+        ON d.zjhm = f.sfzh
+    GROUP BY
+        d.dian_wei_ming_chen,
+        date_format(CAST(d.collecttime AS TIMESTAMP), 'yyyy-MM-dd HH')
+    HAVING
+        COUNT(DISTINCT f.guo_ji) >= 2
+        AND COUNT(DISTINCT d.zjhm) >= 2
+),
+
+kunming_repeat AS (
+    -- 昆明市内多次重复活动
+    SELECT
+        d.zjhm,
+        COUNT(*) AS total_times
+    FROM ywk_sc_dgz_dg_ry_zh_new_2001_lhcz_ai_model_test d
+    JOIN foreign_person f
+        ON d.zjhm = f.sfzh
+    WHERE d.areacode LIKE '5301%'
+    GROUP BY d.zjhm
+    HAVING COUNT(*) >= 3
+)
+
+-- 汇总输出
+SELECT
+    'WIFI聚集' AS abnormal_type,
+    bssid      AS location_id,
+    ssid       AS location_name,
+    time_slot,
+    country_cnt,
+    person_cnt
+FROM wifi_group
+
+UNION ALL
+
+SELECT
+    '地点聚集' AS abnormal_type,
+    dian_wei_ming_chen AS location_id,
+    dian_wei_ming_chen AS location_name,
+    time_slot,
+    country_cnt,
+    person_cnt
+FROM place_group
+
+UNION ALL
+
+SELECT
+    '昆明多点重复活动' AS abnormal_type,
+    zjhm  AS location_id,
+    NULL  AS location_name,
+    NULL  AS time_slot,
+    NULL  AS country_cnt,
+    total_times AS person_cnt
+FROM kunming_repeat;",1,
+39,最近一年出现的涉恐涉稳人员关系人可疑行为有什么。,ywk_sc_skry_12lei_zhenghe_01_lhcz_ai_model_test;lhcz_qy_jcmx_wabq_result_lhcz_ai_model_test;ywk_sc_ztk_huji_hunyin_zhenghe_guanxi_2001_lhcz_ai_model_test,"WITH sk_sw_person AS (
+    SELECT
+        sfzh,
+        xm,
+        rylbmc
+    FROM ywk_sc_skry_12lei_zhenghe_01_lhcz_ai_model_test
+    WHERE rylbmc IN ('涉恐人员','涉稳人员')
+),
+-- 2. 关系人
+relation_person AS (
+    SELECT
+        r.sfzh    AS sk_sw_sfzh,
+        g.sfzh    AS relation_sfzh,
+        g.guan_xi
+    FROM sk_sw_person r
+    JOIN ywk_sc_ztk_huji_hunyin_zhenghe_guanxi_2001_lhcz_ai_model_test g
+        ON r.sfzh = g.sfzh
+),
+
+-- 3. 关系人近期可疑网络行为（近30天）
+suspicious_behavior AS (
+    SELECT
+        sfzh,
+        sj,
+        qbid,
+        qbidhz,
+        sacs,
+        appname,
+        urlbq
+    FROM lhcz_qy_jcmx_wabq_result_lhcz_ai_model_test
+    WHERE dt >= TO_CHAR(
+                  DATEADD(GETDATE(), -365, 'DD'),
+                  'yyyyMMdd'
+              )
+      AND (
+            appname IS NOT NULL
+         OR urlbq IS NOT NULL
+         OR sacs IS NOT NULL
+      )
+)
+
+-- 4. 汇总输出
+SELECT
+    r.sk_sw_sfzh        AS 涉K涉W人员身份证号,
+    r.relation_sfzh     AS 关系人身份证号,
+    r.guan_xi           AS 关系类型,
+    s.sj                AS 可疑行为时间,
+    s.qbidhz            AS 情报标题,
+    s.sacs              AS 涉案次数,
+    s.appname           AS 小众应用,
+    s.urlbq             AS 可疑URL
+FROM relation_person r
+JOIN suspicious_behavior s
+    ON r.relation_sfzh = s.sfzh;
+",,
+40,境外涉K人员、出境长期未归人员、境外反宣人员、出境后变换国籍等人员是否跟其亲属及出境前同行、同住、同上网、涉同案线等人员在广州、三亚等内地城市会面。,ywk_sc_skry_12lei_zhenghe_01_lhcz_ai_model_test;dws_ztk_airplane_trace_lhcz_ai_model_test;ywk_sc_ztk_huji_hunyin_zhenghe_guanxi_2001_lhcz_ai_model_test,"WITH sk_person AS (
+    -- 1. 境外涉K / 出境未归 / 反宣 / 变换国籍等重点人
+    SELECT
+        sfzh,
+        xm,
+        rylbmc
+    FROM ywk_sc_skry_12lei_zhenghe_01_lhcz_ai_model_test
+    WHERE rylbmc IN (
+        '境外新疆籍涉恐人员','涉恐重点人', '境外新疆籍涉恐在逃人员','涉危安类重点人员',
+        '境外新疆籍反宣活动人员','境外新疆籍涉民分反宣未成年人'
+    )
+),
+
+rel_person AS (
+    -- 2. 重点人员的亲属关系人
+    SELECT
+        r.sfzh        AS rel_sfzh,
+        r.guan_xi     AS guan_xi,
+        s.sfzh        AS sk_sfzh,
+        s.xm          AS sk_xm,
+        s.rylbmc      AS sk_rylb
+    FROM ywk_sc_ztk_huji_hunyin_zhenghe_guanxi_2001_lhcz_ai_model_test r
+    JOIN sk_person s
+      ON r.hu_hao = s.sfzh
+),
+
+flight_trace AS (
+    -- 3. 航班轨迹（只保留到达广州 / 三亚）
+    SELECT
+        id,
+        sfzh,
+        name,
+        dao_da_ri_qi,
+        dao_zhan,
+        ddd_xzqh
+    FROM dws_ztk_airplane_trace_lhcz_ai_model_test
+    WHERE
+        dao_zhan LIKE '%广州%'
+        OR dao_zhan LIKE '%三亚%'
+)
+
+-- 4. 重点人员 + 亲属 在同一航班同行（会面证据）
+SELECT
+    r.sk_sfzh              AS 重点人员身份证,
+    r.sk_xm                AS 重点人员姓名,
+    r.sk_rylb              AS 人员类别,
+    r.rel_sfzh             AS 亲属身份证,
+    r.guan_xi              AS 亲属关系,
+    f1.dao_zhan             AS 会面城市,
+    f1.dao_da_ri_qi         AS 会面时间,
+    f1.id                   AS 同行标识
+FROM rel_person r
+JOIN flight_trace f1
+  ON r.sk_sfzh = f1.sfzh
+JOIN flight_trace f2
+  ON r.rel_sfzh = f2.sfzh
+ AND f1.id = f2.id;
+",1,
+41,与手机号为 15019980404 的人员在同一地点频繁定外卖的人有哪些？,ysk_02zee_mtddxx_001_lhcz_ai_model_test,"WITH base_orders AS (
+    SELECT
+        binded_phone,
+        address,
+        order_createtime
+    FROM ysk_02zee_mtddxx_001_lhcz_ai_model_test
+    WHERE dt >= '20260101'
+      AND address IS NOT NULL
+      AND binded_phone IS NOT NULL
+),
+
+target_addr AS (
+    SELECT DISTINCT
+        address
+    FROM base_orders
+    WHERE binded_phone = '15019980404'
+),
+
+same_place_orders AS (
+    SELECT
+        o.binded_phone,
+        o.address,
+        COUNT(*) AS order_cnt
+    FROM base_orders o
+    JOIN target_addr t
+      ON o.address = t.address
+    WHERE o.binded_phone <> '15019980404'
+    GROUP BY o.binded_phone, o.address
+)
+
+SELECT
+    binded_phone      AS 同地点人员手机号,
+    address           AS 同一收货地址,
+    order_cnt         AS 外卖次数
+FROM same_place_orders
+WHERE order_cnt >= 3
+ORDER BY order_cnt DESC;",,
+42,目前云南昆明各辖区涉案线人员有多少人？,mxgl_ztk_sasx_zhenghe_ql_lhcz_ai_model_test;ywk_sc_czrkjbxx_zhenghe_2001_lhcz_ai_model_test,"SELECT
+    c.fen_ju_ming_cheng AS 分局名称,
+    COUNT(DISTINCT c.gong_min_shen_fen_hao_ma) AS 涉案线人员数
+FROM ywk_sc_czrkjbxx_zhenghe_2001_lhcz_ai_model_test c
+INNER JOIN mxgl_ztk_sasx_zhenghe_ql_lhcz_ai_model_test s
+    ON c.gong_min_shen_fen_hao_ma = s.sfzh
+WHERE c.fen_ju_ming_cheng LIKE '%昆明市公安局%分局'
+GROUP BY c.fen_ju_ming_cheng
+ORDER BY 涉案线人员数 DESC;",,
+43,外逃人员的可疑轨迹信息有哪些？,ywk_sc_9leipeople_hmd_2001_lhcz_ai_model_test;ywk_sc_dgz_dg_ry_zh_new_2001_lhcz_ai_model_test;ywk_sc_sj_gjzh_new_1_dd_2001_lhcz_ai_model_test,"SELECT
+    h.sfzh                                  AS sfzh,              -- 身份证号
+    h.lx                                    AS control_type,      -- 管控类型
+    h.czcs                                  AS control_measure,   -- 处置措施
+    g.collecttime                           AS collect_time,      -- 采集时间
+    g.dian_wei_ming_chen                   AS device_location,   -- 点位名称
+    g.she_bei_lei_xing                     AS device_type,       -- 设备类型
+    g.areacode                             AS area_code,         -- 行政区划
+    t.huo_dong_kai_shi_shi_jian             AS activity_start,   -- 活动开始时间
+    t.huo_dong_jie_shu_shi_jian             AS activity_end,     -- 活动结束时间
+    t.huo_dong_kai_shi_di_city              AS start_city,       -- 开始城市
+    t.huo_dong_jie_shu_di_city              AS end_city,         -- 结束城市
+    t.gui_ji_wei_zhi                        AS key_location,     -- 轨迹位置
+    t.type                                  AS track_type,       -- 轨迹类型
+    t.message                               AS warning_message   -- 告警/通报信息
+FROM ywk_sc_9leipeople_hmd_2001_lhcz_ai_model_test h
+LEFT JOIN ywk_sc_dgz_dg_ry_zh_new_2001_lhcz_ai_model_test g
+    ON h.sfzh = g.zjhm
+    AND g.collecttime >= '2026-01-01 00:00:00'
+LEFT JOIN ywk_sc_sj_gjzh_new_1_dd_2001_lhcz_ai_model_test t
+    ON h.sfzh = t.zheng_jian_hao
+    AND t.huo_dong_kai_shi_shi_jian >= '2026-01-01 00:00:00'
+WHERE  (
+        t.gui_ji_wei_zhi LIKE '%机场%'
+     OR t.gui_ji_wei_zhi LIKE '%火车站%'
+     OR t.huo_dong_jie_shu_di_city <> t.huo_dong_kai_shi_di_city
+  ) and g.dt >= '20260101' and t.dt >= '20260101';",1,
+44,身份证号为 530112195201010078 的人员是否具备制造爆炸物的能力？,ywk_sc_purchase_goods_lhcz_ai_model_test,"SELECT
+    xm,
+    sfzh,
+    store,
+    wpmc,
+    wp_gg,
+    mcsj
+FROM ywk_sc_purchase_goods_lhcz_ai_model_test
+WHERE sfzh = '530112195201010078'
+  AND
+        wpmc in  ('电雷管', '导爆索', '导火索','硝酸铵', '硝酸钾', '氯酸钾', '高氯酸钾', '黑火药');",,
+45,证件号码为 110105200209210439 的人员在校期间是否存在可疑网上行为？,lhcz_qy_jcmx_wabq_result_lhcz_ai_model_test;lhcz_wx_tmp_ztk_students_lhcz_ai_model_test,"SELECT
+    s.sfzh,
+    s.xm,
+    s.xxmc,
+    s.rxrq,
+    w.sj       AS suspicious_time,
+    w.rylb     AS suspicious_type,
+    w.qbidhz   AS suspicious_desc,
+    w.appname,
+    w.urlbq
+FROM lhcz_wx_tmp_ztk_students_lhcz_ai_model_test s
+JOIN lhcz_qy_jcmx_wabq_result_lhcz_ai_model_test w
+  ON s.sfzh = w.sfzh
+ AND w.sj >= s.rxrq
+WHERE s.sfzh = '110105200209210439';",,
+46,证件号为 53250219760211015X 的人员目前在押吗？,mxgl_ywk_jysj_jgsj_huizong_lhcz_ai_model_test,"SELECT
+    sfzh,
+    xm,
+    ryzt,
+    jsmc,
+    rsrq
+FROM mxgl_ywk_jysj_jgsj_huizong_lhcz_ai_model_test
+WHERE sfzh = '53250219760211015X'
+  AND ryzt = '在押';",,
+47,号牌号码为 云A66M02 的车辆的轨迹信息是什么,ywk_sc_sj_ztk_clgjzh_dd_2001_lhcz_ai_model_test,"SELECT
+    cph                     AS chepai_hao,          -- 车牌号
+    huo_dong_shi_jian       AS huodong_shijian,     -- 活动时间
+    address                 AS tingliu_didian,     -- 经过/抓拍地点
+    jing_du                 AS jingdu,              -- 经度
+    wei_du                  AS weidu,               -- 纬度
+    she_bei_bian_hao        AS shebei_id,           -- 设备编号
+    xzqh                    AS xingzheng_quhua,    -- 行政区划
+    datasource,
+    dt
+FROM ywk_sc_sj_ztk_clgjzh_dd_2001_lhcz_ai_model_test
+WHERE cph = '云A66M02';
+",,
+48,2025年以来新增涉恐涉稳人员的同行同住人员有哪些？,ywk_sc_skry_12lei_zhenghe_01_lhcz_ai_model_test;ywk_sc_txtzmxzhesb_20_lhcz_ai_model_test,"WITH new_suspect_kw AS (
+    SELECT
+        sfzh,
+        xm,
+        rylbmc,
+        lrsj
+    FROM ywk_sc_skry_12lei_zhenghe_01_lhcz_ai_model_test
+    WHERE lrsj >= '2025-01-01 00:00:00'
+      AND rylbmc in ('涉恐人员','涉稳人员')
+),
+together_rel AS (
+    SELECT
+        sfzh        AS suspect_sfzh,
+        gxr_sfzh    AS peer_sfzh,
+        first_time,
+        last_time,
+        sensitive_level,
+        type
+    FROM ywk_sc_txtzmxzhesb_20_lhcz_ai_model_test
+)
+SELECT
+    n.sfzh            AS 涉K涉W人员身份证号,
+    n.xm              AS 涉K涉W人员姓名,
+    n.rylbmc          AS 人员类别,
+    r.peer_sfzh       AS 同行同住人员身份证号,
+    r.first_time      AS 首次发现时间,
+    r.last_time       AS 最后发现时间,
+    r.sensitive_level AS 敏感级别,
+    r.type            AS 关系类型
+FROM new_suspect_kw n
+JOIN together_rel r
+  ON n.sfzh = r.suspect_sfzh;",,
+49,证件号为 533102198409090226 的人员所在单位是否有标签人员或可疑上网行为人员？,lhcz_wx_jcmx_zhiye_zhenghe_lhcz_ai_model_test;ywk_sc_skry_12lei_zhenghe_01_lhcz_ai_model_test;lhcz_qy_jcmx_wabq_result_lhcz_ai_model_test,"WITH target_person AS (
+    -- 1. 获取目标人员所在工作单位
+    SELECT
+        sfzh,
+        xm,
+        gzdw
+    FROM lhcz_wx_jcmx_zhiye_zhenghe_lhcz_ai_model_test
+    WHERE sfzh = '533102198409090226'
+),
+
+same_unit_person AS (
+    -- 2. 找出同一工作单位的其他人员
+    SELECT
+        a.sfzh,
+        a.xm,
+        a.gzdw
+    FROM lhcz_wx_jcmx_zhiye_zhenghe_lhcz_ai_model_test a
+    JOIN target_person t
+      ON a.gzdw = t.gzdw
+),
+
+tagged_person AS (
+    -- 3. 单位内是否存在 12 类重点标签人员
+    SELECT DISTINCT
+        s.sfzh,
+        s.xm,
+        '重点人标签' AS risk_type
+    FROM same_unit_person s
+    JOIN ywk_sc_skry_12lei_zhenghe_01_lhcz_ai_model_test k
+      ON s.sfzh = k.sfzh
+),
+
+cyber_risk_person AS (
+    -- 4. 单位内是否存在可疑上网 / 网安标签人员
+    SELECT DISTINCT
+        s.sfzh,
+        s.xm,
+        '可疑上网行为' AS risk_type
+    FROM same_unit_person s
+    JOIN lhcz_qy_jcmx_wabq_result_lhcz_ai_model_test w
+      ON s.sfzh = w.sfzh
+)
+
+-- 5. 汇总输出
+SELECT
+    sfzh,
+    xm,
+    risk_type
+FROM tagged_person
+
+UNION ALL
+
+SELECT
+    sfzh,
+    xm,
+    risk_type
+FROM cyber_risk_person;",,
+50,证件号为 530702198210100167 的人员的家人是否存在服刑人员？,ywk_sc_ztk_huji_hunyin_zhenghe_guanxi_2001_lhcz_ai_model_test;mxgl_ywk_jysj_jgsj_huizong_lhcz_ai_model_test,"WITH family_members AS (
+-- 查询服刑家人的详细信息
+    SELECT f2.sfzh, f2.guan_xi
+    FROM ywk_sc_ztk_huji_hunyin_zhenghe_guanxi_2001_lhcz_ai_model_test f1
+    INNER JOIN ywk_sc_ztk_huji_hunyin_zhenghe_guanxi_2001_lhcz_ai_model_test f2
+        ON f1.hu_hao = f2.hu_hao
+    WHERE f1.sfzh = '530702198210100167'
+      AND f2.sfzh <> '530702198210100167'
+)
+SELECT
+    fm.guan_xi AS 与查询人关系,
+    p.xm AS 服刑人姓名,
+    p.sfzh AS 服刑人身份证,
+    p.zmmc AS 罪名,
+    p.xq AS 刑期,
+    p.jsmc AS 关押监所,
+    p.rsrq AS 入所日期,
+    p.xq_zr AS 预计释放日期
+FROM family_members fm
+INNER JOIN mxgl_ywk_jysj_jgsj_huizong_lhcz_ai_model_test p
+    ON fm.sfzh = p.sfzh
+WHERE p.ryzt = '在押';",,
+51,2025年以来频繁前往国外人员且目前未归人员？,ywk_sc_crjglxt_sj_crjjl_sfxx_ql_2001_lhcz_ai_model_test;ywk_sc_crj_xj_cjwg_df_2001_lhcz_ai_model_test,"WITH frequent_travelers AS (
+    SELECT
+        sfzh,
+        crj_xing_ming AS xm,
+        COUNT(1) AS exit_count
+    FROM ywk_sc_crjglxt_sj_crjjl_sfxx_ql_2001_lhcz_ai_model_test
+    WHERE chu_ru_jing_biao_shi = '出境'
+      AND CAST(chu_ru_jing_shi_jian AS DATETIME) >= CAST('2025-01-01 00:00:00' AS DATETIME)
+    GROUP BY sfzh, crj_xing_ming
+    HAVING COUNT(1) >= 3
+)
+SELECT
+    f.sfzh AS 身份证号,
+    f.xm AS 姓名,
+    f.exit_count AS 出境次数,
+    u.qian_wang_guo_jia AS 最后前往国家,
+    u.chu_ru_jing_shi_jian AS 最后出境时间
+FROM frequent_travelers f
+INNER JOIN ywk_sc_crj_xj_cjwg_df_2001_lhcz_ai_model_test u
+    ON f.sfzh = u.sfzh
+ORDER BY f.exit_count DESC;",,
+52,原云南籍人员取得外籍后返滇人员是哪些？,ywk_sc_scgj_result_2001_lhcz_ai_model_test;ywk_sc_sj_gjzh_new_1_dd_2001_lhcz_ai_model_test;ywk_sc_crjglxt_sj_crjjl_sfxx_ql_2001_lhcz_ai_model_test,"WITH dual_nationality AS (
+      -- 双重国籍人员
+      SELECT
+          sfzh,
+          xm,
+          qdwggjqk AS foreign_nationality,
+          ck_hjdz AS original_hukou
+      FROM ywk_sc_scgj_result_2001_lhcz_ai_model_test
+      WHERE sfzh LIKE '53%'
+  ),
+  return_to_yunnan AS (
+      -- 返滇轨迹（目的地为云南，出发地非云南）
+      SELECT
+          zheng_jian_hao,
+          xing_ming,
+          huo_dong_kai_shi_shi_jian AS departure_time,
+          huo_dong_kai_shi_di_sheng AS from_province,
+          huo_dong_kai_shi_di_city AS from_city,
+          huo_dong_jie_shu_di_sheng AS to_province,
+          huo_dong_jie_shu_di_city AS to_city,
+          type AS transport_type,
+          message
+      FROM ywk_sc_sj_gjzh_new_1_dd_2001_lhcz_ai_model_test
+      WHERE huo_dong_jie_shu_di_sheng = '云南省'
+        AND huo_dong_kai_shi_di_sheng != '云南省'
+  )
+  SELECT
+      d.sfzh AS 身份证号,
+      d.xm AS 姓名,
+      d.foreign_nationality AS 外国国籍,
+      d.original_hukou AS 原户籍地,
+      r.departure_time AS 返滇时间,
+      CONCAT(r.from_province, r.from_city) AS 出发地,
+      CONCAT(r.to_province, r.to_city) AS 目的地,
+      r.transport_type AS 出行方式,
+      r.message AS 轨迹描述
+  FROM dual_nationality d
+  INNER JOIN return_to_yunnan r ON d.sfzh = r.zheng_jian_hao
+  ORDER BY r.departure_time DESC;",,
+53,与曾洋同行同住人员中是否存在2024年以来出境未归人员？,ywk_sc_czrkjbxx_zhenghe_2001_lhcz_ai_model_test;ywk_sc_txtzmxzhesb_20_lhcz_ai_model_test;ywk_sc_crj_xj_cjwg_df_2001_lhcz_ai_model_test," -- 查询同行同住人员中是否存在2024年以来出境未归人员
+  WITH target_person AS (
+      SELECT gong_min_shen_fen_hao_ma AS sfzh
+      FROM ywk_sc_czrkjbxx_zhenghe_2001_lhcz_ai_model_test
+      WHERE xing_ming = '曾洋'
+      LIMIT 1
+  ),
+  companions AS (
+      SELECT DISTINCT gxr_sfzh AS companion_sfzh
+      FROM ywk_sc_txtzmxzhesb_20_lhcz_ai_model_test
+      WHERE sfzh IN (SELECT sfzh FROM target_person)
+        AND type = '同行同住'
+  )
+  SELECT
+      CASE WHEN COUNT(*) > 0 THEN '是' ELSE '否' END AS 同行同住人员中存在出境未归人员,
+      COUNT(*) AS 出境未归人员数
+  FROM companions c
+  INNER JOIN ywk_sc_crj_xj_cjwg_df_2001_lhcz_ai_model_test u
+      ON c.companion_sfzh = u.sfzh
+  WHERE u.indate >= 20240101;  -- 2024年1月1日以来",,
+54,证件号是 532801198306090347 的亲密关系人员有那些？,ywk_sc_czrkjbxx_zhenghe_2001_lhcz_ai_model_test;ywk_sc_ztk_huji_hunyin_zhenghe_guanxi_2001_lhcz_ai_model_test,"WITH relation_person AS (
+    SELECT  DISTINCT a.sfzh
+        ,b.sfzh gxr_sfzh
+        ,b.guan_xi
+FROM    (
+            SELECT  *
+            FROM    ywk_sc_ztk_huji_hunyin_zhenghe_guanxi_2001_lhcz_ai_model_test
+            WHERE   sfzh = '532801198306090347'-----身份证号1
+            and is_xianjiazu='现家族'
+
+        ) a
+JOIN    (
+            SELECT  *
+            FROM    ywk_sc_ztk_huji_hunyin_zhenghe_guanxi_2001_lhcz_ai_model_test
+            where is_xianjiazu='现家族'
+        ) b
+ON      a.hu_hao = b.hu_hao
+)
+SELECT
+    c.xing_ming              AS 关系人姓名,
+    c.gong_min_shen_fen_hao_ma AS 关系人身份证号,
+    r.guan_xi                AS 与李明关系,
+    c.hu_ji_di_zhi            AS 户籍地址,
+    c.she_qu_ming_cheng       AS 社区名称
+FROM relation_person r
+JOIN ywk_sc_czrkjbxx_zhenghe_2001_lhcz_ai_model_test c
+  ON r.gxr_sfzh = c.gong_min_shen_fen_hao_ma;
+",,
+55,身份证 533103198707200020 的人员关系人中是否有底子干净且安装小众软件人员？,ywk_sc_ztk_huji_hunyin_zhenghe_guanxi_2001_lhcz_ai_model_test;ywk_sc_txtzmxzhesb_20_lhcz_ai_model_test;mxgl_ztk_sasx_zhenghe_ql_lhcz_ai_model_test;mxgl_ywk_jysj_jgsj_huizong_lhcz_ai_model_test;ywk_sc_skry_12lei_zhenghe_01_lhcz_ai_model_test;lhcz_qy_jcmx_wabq_result_lhcz_ai_model_test,"WITH rel_person AS (
+    -- ① 取目标人员的关系人
+select sfzh as gxr_sfzh
+from ywk_sc_ztk_huji_hunyin_zhenghe_guanxi_2001_lhcz_ai_model_test
+where hu_hao_id in
+(select hu_hao_id from ywk_sc_ztk_huji_hunyin_zhenghe_guanxi_2001_lhcz_ai_model_test
+where sfzh = '533103198707200020')
+),
+
+clean_person AS (
+    -- ② 排除有案件、在押、重点人标签的“底子不干净”人员
+    SELECT
+        r.gxr_sfzh
+    FROM rel_person r
+    LEFT JOIN mxgl_ztk_sasx_zhenghe_ql_lhcz_ai_model_test a
+        ON r.gxr_sfzh = a.sfzh
+    LEFT JOIN mxgl_ywk_jysj_jgsj_huizong_lhcz_ai_model_test j
+        ON r.gxr_sfzh = j.sfzh
+    LEFT JOIN ywk_sc_skry_12lei_zhenghe_01_lhcz_ai_model_test s
+        ON r.gxr_sfzh = s.sfzh
+    WHERE a.sfzh IS NULL
+      AND j.sfzh IS NULL
+      AND s.sfzh IS NULL
+),
+
+minor_app_person AS (
+    -- ③ 命中小众应用的人员
+    SELECT DISTINCT
+        w.sfzh,
+        w.appname
+    FROM lhcz_qy_jcmx_wabq_result_lhcz_ai_model_test w
+    WHERE w.appname IS NOT NULL
+)
+
+-- ④ 最终结果：底子干净 + 安装小众软件
+SELECT
+    c.gxr_sfzh      AS 关系人身份证号,
+    m.appname       AS 小众应用名称
+FROM clean_person c
+JOIN minor_app_person m
+    ON c.gxr_sfzh = m.sfzh;",,
+56,身份证 532601195003030158 的人员的关系人中是否存在近期收押收监人员？,ywk_sc_ztk_huji_hunyin_zhenghe_guanxi_2001_lhcz_ai_model_test;ywk_sc_txtzmxzhesb_20_lhcz_ai_model_test;mxgl_ywk_jysj_jgsj_huizong_lhcz_ai_model_test,"WITH rel_person AS
+(
+    -- ① 取得目标人员的关系人身份证
+    SELECT  sfzh
+            ,gxr_sfzh
+            ,WM_CONCAT('|',type) type
+    FROM    (
+                SELECT  DISTINCT sfzh
+                        ,gxr_sfzh
+                        ,type
+                FROM    ywk_sc_txtzmxzhesb_20_lhcz_ai_model_test
+                WHERE   sfzh = '532601195003030158' -----身份证号1
+                UNION ALL
+                SELECT  DISTINCT a.sfzh
+                        ,b.sfzh gxr_sfzh
+                        ,'亲属' type
+                FROM    (
+                            SELECT  *
+                            FROM    ywk_sc_ztk_huji_hunyin_zhenghe_guanxi_2001_lhcz_ai_model_test
+                            WHERE   sfzh = '532601195003030158' -----身份证号1
+                        ) a
+                JOIN    (
+                            SELECT  *
+                            FROM    ywk_sc_ztk_huji_hunyin_zhenghe_guanxi_2001_lhcz_ai_model_test
+                        ) b
+                ON      a.hu_hao = b.hu_hao
+            )
+    GROUP BY sfzh
+             ,gxr_sfzh
+)
+,recent_detain AS
+(
+    -- ② 关系人中，筛选近期收押 / 在押人员
+    SELECT  sfzh
+            ,xm
+            ,ryzt
+            ,rsrq
+            ,jsmc
+            ,rsyy
+            ,zmmc
+    FROM    mxgl_ywk_jysj_jgsj_huizong_lhcz_ai_model_test
+    WHERE   ryzt = '在押'
+    OR      rsrq >= DATEADD(GETDATE(),-30,'day')
+) -- ③ 输出最终结果
+SELECT  r.gxr_sfzh AS relation_sfzh
+        ,r.TYPE AS relation_type
+        ,d.xm AS relation_name
+        ,d.ryzt AS detain_status
+        ,d.rsrq AS detain_time
+        ,d.jsmc AS detain_place
+        ,d.rsyy AS detain_reason
+        ,d.zmmc AS crime_name
+FROM    rel_person r
+JOIN    recent_detain d
+ON      r.gxr_sfzh = d.sfzh
+;",,
+57,不同地区两名及两名以上重点人员请假外出，在云南某地同行、同住、同wifi、设备同行？,ywk_sc_temp_xxx_siquan_tmp_ywk_sc_zdryqxj_zhenghe_2001_lhcz_ai_model_test;dws_ztk_airplane_trace_lhcz_ai_model_test;dws_ztk_train_trace_lhcz_ai_model_test;lhcz_ghm_twifi_sfzh_results_lhcz_ai_model_test;lhcz_qy_sk_geohash_sbtx_cardno_result_lhcz_ai_model_test;ztk_check_inout_hotel_lhcz_ai_model_test,"WITH qj_people AS (
+    -- ① 请假流入云南的重点人员
+    SELECT
+        idcard,
+        lrdshidm hjdqh,
+        qjkssj,
+        qjjssj
+    FROM ywk_sc_temp_xxx_siquan_tmp_ywk_sc_zdryqxj_zhenghe_2001_lhcz_ai_model_test 
+),
+同行同住 AS (
+    select distinct md_id event_id,a.sfzh from ywk_sc_txtzmxzhesb_20_lhcz_ai_model_test a 
+    join qj_people b on a.sfzh = b.idcard
+),
+同wifi AS (
+    -- ④ 同 WIFI
+    SELECT
+        bssid AS event_id,
+        sfzh
+    FROM lhcz_ghm_twifi_sfzh_results_lhcz_ai_model_test w
+    JOIN qj_people q
+      ON w.sfzh = q.idcard
+     AND w.min_time BETWEEN q.qjkssj AND q.qjjssj
+),
+设备同行 AS (
+    -- ⑤ 设备同行
+    SELECT
+        CONCAT(zjhm,'_',tx_zjhm) AS event_id,
+        zjhm AS sfzh
+    FROM lhcz_qy_sk_geohash_sbtx_cardno_result_lhcz_ai_model_test d
+    JOIN qj_people q
+      ON d.zjhm = q.idcard
+),
+all_events AS (
+    SELECT * FROM 同行同住
+    UNION ALL
+    SELECT * FROM 同wifi
+    UNION ALL
+    SELECT * FROM 设备同行
+)
+-- ⑥ 输出：不同户籍地区 ≥2 人的同行同住同网同设备事件
+SELECT
+    e.event_id,
+    COUNT(DISTINCT e.sfzh)            AS person_cnt,
+    COUNT(DISTINCT q.hjdqh)           AS hjdqh_cnt
+FROM all_events e
+JOIN qj_people q
+  ON e.sfzh = q.idcard
+GROUP BY e.event_id
+HAVING COUNT(DISTINCT e.sfzh) >= 2
+   AND COUNT(DISTINCT q.hjdqh) >= 2;",,
+58,涉及多起危安类案件且多次出滇活动的人员，根据人员多次出滇行为，分析同行人员中是否存在与本人相同涉案线的人员？,mxgl_ywk_jysj_jgsj_huizong_lhcz_ai_model_test;ywk_sc_sj_gjzh_new_1_dd_2001_lhcz_ai_model_test;dws_ztk_airplane_trace_lhcz_ai_model_test;dws_ztk_train_trace_lhcz_ai_model_test;mxgl_ztk_sasx_zhenghe_ql_lhcz_ai_model_test,"WITH
+wa_multi_case_person AS (
+    --1. 涉及多起危安类案件人员 
+    SELECT
+        sfzh
+    FROM mxgl_ywk_jysj_jgsj_huizong_lhcz_ai_model_test
+    WHERE if_wa = '是'
+    GROUP BY sfzh,fzss
+    HAVING COUNT(1) >= 2
+),
+--2. 多次出滇人员 
+multi_out_yunnan_person AS (
+    SELECT
+        zheng_jian_hao AS sfzh
+    FROM ywk_sc_sj_gjzh_new_1_dd_2001_lhcz_ai_model_test
+    WHERE huo_dong_kai_shi_di_sheng = '云南省'
+      AND huo_dong_jie_shu_di_sheng <> '云南省'
+    GROUP BY zheng_jian_hao
+    HAVING COUNT(1) >= 2
+),
+
+--3. 目标人员
+target_person AS (
+    SELECT
+        w.sfzh
+    FROM wa_multi_case_person w
+    JOIN multi_out_yunnan_person o
+      ON w.sfzh = o.sfzh
+),
+--4. 同行人员（必须使用英文别名）
+同行人员 AS (
+    -- 民航同行
+    SELECT
+        a.sfzh AS target_sfzh,
+        b.sfzh AS peer_sfzh
+    FROM dws_ztk_airplane_trace_lhcz_ai_model_test a
+    JOIN dws_ztk_airplane_trace_lhcz_ai_model_test b
+      ON a.id = b.id
+     AND a.sfzh <> b.sfzh
+    WHERE a.sfzh IN (SELECT sfzh FROM target_person)
+
+    UNION ALL
+
+    -- 铁路同行
+    SELECT
+        a.sfzh AS target_sfzh,
+        b.sfzh AS peer_sfzh
+    FROM dws_ztk_train_trace_lhcz_ai_model_test a
+    JOIN dws_ztk_train_trace_lhcz_ai_model_test b
+      ON a.id = b.id
+     AND a.sfzh <> b.sfzh
+    WHERE a.sfzh IN (SELECT sfzh FROM target_person)
+),
+
+--5. 同案线匹配
+same_case_line AS (
+    SELECT
+        t.target_sfzh,
+        t.peer_sfzh,
+        s1.ajxsbh
+    FROM 同行人员 t
+    JOIN mxgl_ztk_sasx_zhenghe_ql_lhcz_ai_model_test s1
+      ON t.target_sfzh = s1.sfzh
+    JOIN mxgl_ztk_sasx_zhenghe_ql_lhcz_ai_model_test s2
+      ON t.peer_sfzh = s2.sfzh
+     AND s1.ajxsbh = s2.ajxsbh
+)
+--6. 最终输出（这里才可以用中文别名） 
+SELECT DISTINCT
+    target_sfzh AS 目标人员身份证号,
+    peer_sfzh   AS 同行人员身份证号,
+    ajxsbh      AS 共同涉案线索编号
+FROM same_case_line;",1,提供的人SQL执行不了
+59,身份证为 530112197902020286 人员是否存在异常踩点情况？,ywk_sc_dgz_dg_ry_zh_new_2001_lhcz_ai_model_test,"SELECT
+    zjhm AS 身份证号,
+    xm AS 姓名,
+    dian_wei_ming_chen AS 点位名称,
+    collecttime AS 采集时间,
+    cjlx AS 采集类型,
+    jcbs AS 进出标识,
+    qx AS 区县
+FROM ywk_sc_dgz_dg_ry_zh_new_2001_lhcz_ai_model_test
+WHERE zjhm = '530112197902020286'
+  AND (
+      dian_wei_ming_chen LIKE '%政府%'
+      OR dian_wei_ming_chen LIKE '%公安%'
+      OR dian_wei_ming_chen LIKE '%机关%'
+      OR dian_wei_ming_chen LIKE '%派出所%'
+  )
+ORDER BY collecttime DESC;
+",1,什么样的数据是异常踩点的数据？
+60,境外涉K人员、出境长期未归人员、境外反宣人员、出境后变换国籍等人员是否跟其亲属、关系人员在中缅边境合作中心会面？,ywk_sc_skry_12lei_zhenghe_01_lhcz_ai_model_test;ywk_sc_crj_xj_cjwg_df_2001_lhcz_ai_model_test;ywk_sc_scgj_result_2001_lhcz_ai_model_test;ywk_sc_ztk_huji_hunyin_zhenghe_guanxi_2001_lhcz_ai_model_test;ywk_sc_txtzmxzhesb_20_lhcz_ai_model_test;ywk_sc_dgz_dg_ry_zh_new_2001_lhcz_ai_model_test,"-- 步骤1: 找出双重国籍人员
+WITH dual_nationality AS (
+    SELECT sfzh, xm FROM ywk_sc_scgj_result_2001_lhcz_ai_model_test
+    WHERE dt = '20260115'
+),
+-- 步骤2: 找出双重国籍人员的户籍关系人
+family_members AS (
+    SELECT
+        a.sfzh AS sensitive_person,
+        b.sfzh AS family_member,
+        b.guan_xi AS relationship
+    FROM ywk_sc_ztk_huji_hunyin_zhenghe_guanxi_2001_lhcz_ai_model_test a
+    JOIN ywk_sc_ztk_huji_hunyin_zhenghe_guanxi_2001_lhcz_ai_model_test b
+        ON a.hu_hao_id = b.hu_hao_id
+        AND a.sfzh != b.sfzh
+    WHERE a.sfzh IN (SELECT sfzh FROM dual_nationality)
+),
+-- 步骤3: 查询边境会面记录
+border_traces AS (
+    SELECT
+        zjhm,
+        xm,
+        dian_wei_ming_chen,
+        collecttime,
+        TO_DATE(collecttime) AS meet_date
+    FROM ywk_sc_dgz_dg_ry_zh_new_2001_lhcz_ai_model_test
+    WHERE dian_wei_ming_chen LIKE '%边境%'
+       OR dian_wei_ming_chen LIKE '%姐告%'
+       OR dian_wei_ming_chen LIKE '%口岸%'
+)
+-- 步骤4: 关联查找同日会面
+SELECT
+    dn.xm AS 敏感人员姓名,
+    dn.sfzh AS 敏感人员身份证,
+    fm.relationship AS 关系,
+    bt2.xm AS 会面人员姓名,
+    bt1.meet_date AS 会面日期,
+    bt1.dian_wei_ming_chen AS 会面地点
+FROM dual_nationality dn
+JOIN family_members fm ON dn.sfzh = fm.sensitive_person
+JOIN border_traces bt1 ON dn.sfzh = bt1.zjhm
+JOIN border_traces bt2 ON fm.family_member = bt2.zjhm
+    AND bt1.meet_date = bt2.meet_date
+ORDER BY bt1.meet_date DESC;",1,提供的人SQL执行不了

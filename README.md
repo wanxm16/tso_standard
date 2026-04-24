@@ -2,7 +2,7 @@
 
 `wanxm16/tso_standard` 的离线配套实现包。从 119 张虚拟表脚手架出发，经字段归一、虚拟字段生成、源字段映射，到 benchmark 评估闭环，产出面向 Text2SQL **表召回层**的虚拟表语义层。
 
-> ✋ 本仓库不负责 SQL 生成 / JOIN 编排 / 执行计划；那是独立的下游模块。详见 `tasks/decisions.md` 2026-04-21 条 3。
+> ✋ 本仓库不负责 SQL 生成 / JOIN 编排 / 执行计划；那是独立的下游模块。
 
 ## 快速开始
 
@@ -93,51 +93,58 @@ python3 scripts/run_evaluation.py              # 11
 
 ```
 tso_standard/
-├── requirement/            # 详细设计说明（V1.0）
 ├── data/
 │   ├── phrase_2/           # DDL / 样例 / 使用情况 / 分类树（中文文件名硬编码）
 │   ├── benchmark/          # query_with_table.{json,csv} + query_sql.csv
 │   ├── slot_library/       # base_slots.yaml（+ domain_slots.yaml by I-05b）
 │   └── feedback/           # review_log.jsonl / slot_proposals_log.jsonl
 ├── scripts/
-│   ├── run_pipeline.py     # ★ I-10 端到端入口
+│   ├── run_pipeline.py         # ★ I-10 端到端入口
 │   ├── discover_new_slots.py   # I-05b 新槽位发现（反馈回路）
 │   └── build_*.py / compute_*.py / make_*.py / run_*.py   # 11 个单步脚本
 ├── src/
 │   ├── llm_client.py       # 统一 chat/embed 接口（DashScope OpenAI 兼容 + 缓存 + retry）
-│   └── pipeline/           # I-02~I-08 的实现模块
+│   ├── pipeline/           # I-02~I-08 的实现模块
+│   └── alignment/          # L1/L2 对齐、cascade、同名异义、base 升级等
 ├── backend/                # FastAPI Review UI 后端
 ├── frontend/               # React + antd Review UI 前端
-├── tasks/                  # todo.md / decisions.md / TASK-I-xx-*.md
 ├── output/                 # 所有中间/最终产物（gitignore）
 └── .llm_cache/             # 文件级缓存（gitignore）
 ```
 
 ## 主要输出
 
-| 文件 | 说明 | 对应设计章节 |
-|---|---|---|
-| `output/virtual_tables_scaffold_final.yaml` | 119 张 VT 定稿 | 5.1 |
-| `output/slot_definitions.yaml` | 每张 VT 的槽位清单 | 10.8.4 |
-| `output/field_normalization.parquet` | 字段归一结果（含置信度 + 冲突）| 10.8.12 |
-| `output/slot_proposals.yaml` | I-05b 新槽位候选 | 10.8.11 |
-| `output/virtual_fields.json` | 虚拟字段清单 | 5.2 / 13 |
-| `output/virtual_field_mappings.json` | 源字段映射 | 5.3 / 13.4 |
-| `output/evaluation.json` | 4 项指标（topic_hit / table_recall / vf_hit / query_support）| 5.5 / 15 |
+| 文件 | 说明 |
+|---|---|
+| `output/virtual_tables_scaffold_final.yaml` | 119 张 VT 定稿 |
+| `output/slot_definitions.yaml` | 每张 VT 的槽位清单 |
+| `output/field_normalization.parquet` | 字段归一结果（含置信度 + 冲突）|
+| `output/slot_proposals.yaml` | I-05b 新槽位候选 |
+| `output/virtual_fields.json` | 虚拟字段清单 |
+| `output/virtual_field_mappings.json` | 源字段映射 |
+| `output/evaluation.json` | 4 项指标（topic_hit / table_recall / vf_hit / query_support）|
+| `output/query_topk_comparison.md` | benchmark × 通道召回对比（embedding / fusion / rerank top5）|
 
 ## LLM / Embedding
 
 - 模型：`qwen3-max`（chat）+ `text-embedding-v3`（1024 维）
 - 统一入口：`src/llm_client.chat()` / `embed()`（不要直接用 openai SDK）
 - 缓存：`.llm_cache/`，同输入零成本重跑；prompt 或 model 变化自动失效
-- LLM 职责：**建议不做决策**。归槽决策走规则（§ 10.8.5-8），LLM 仅在 § 10.8.9 的 4 种边缘场景兜底
+- LLM 职责：**建议不做决策**。归槽决策走规则打分，LLM 仅在 4 种边缘场景兜底
 
-## 项目阶段
+## Review UI
 
-**当前是正式开发阶段**。不走捷径、不 mock、不跳测试。每个 I-xx 开工前建 `tasks/TASK-I-xx-*.md`，实现后对照设计验证。详见 `CLAUDE.md`。
+前后端已实装，覆盖归一审核、同名异义消歧、L1/L2 对齐、base 升级、新槽位候选审核、VT 编辑、分类树编辑等场景。
 
-## 设计文档锚点
+```bash
+bash scripts/dev_review_ui.sh
+# 后端 http://localhost:8001  前端 http://localhost:5173
+```
 
-- `requirement/虚拟表自动生成系统详细设计说明_当前数据适配版V1.0.md`
-- `tasks/todo.md` 四个 Wave 的任务清单
-- `tasks/decisions.md` 跨阶段决策日志
+## 硬约束
+
+- **TF-IDF + Embedding 并行**：字段语义打分保留两条通路做对比，不预先替换
+- **脚手架三段式不可跳步**：rule → llm → final，`run_pipeline.py` 已内置
+- **中文文件名硬编码**：`data/phrase_2/` 下的 `二期_DDL_all.csv` / `二期DDL字段使用情况.csv` / `二期表分类树.json` 等文件名不要改，脚手架脚本按名加载
+- **脚手架三段式必须全跑**：仅 rule 或仅 llm 都不是定稿，必须 `build_scaffold_final.py` 才是下游合法输入
+- **119 张 VT 中 13 张"待定"类型**：在原 L2 下保留，下游用时需忽略 `table_type="待定"` 或单独处理

@@ -1,0 +1,290 @@
+# 字段黑名单 —— 这些字段不参与 VT 归一
+#
+# 消费路径：
+#   src/pipeline/feature_builder.py → is_technical_noise()
+#   打上 is_technical_noise=True 后，下游 slot_scorer.py 会直接跳过（见其 line 423）
+#
+# 三种粒度（任一命中即判为噪声）：
+#   1) exact_names         精确 field_name（全表通配，大小写不敏感）
+#   2) name_patterns       fnmatch 风格通配符（* 匹配任意字符）
+#   3) table_field_pairs   精确 (table_en, field_name) 对，最细粒度
+#
+# 改完这份 yaml 后必须重跑：
+#   python3 scripts/run_pipeline.py --from field_features
+#
+# UI 在 /normalization/review 和 VTEditor 的"剔除"按钮会自动追加到这里（写 exact_names 或 pairs）。
+# 审计日志：data/feedback/field_blacklist_log.jsonl
+#
+# ============================================================
+
+# 精确 field_name（不区分大小写，全库通配）
+exact_names:
+  # 技术/系统字段
+  - pid
+  - id
+  - rn
+  - etl_id
+  - src_id
+  - md5
+  - sha1
+  - sha256
+  - uuid
+  - _uuid
+  - remark
+  - remarks
+  - bz
+  - bei_zhu
+  - 备注
+  - 摘要
+  - memo
+  - comments
+  - note
+  - notes
+  - description
+  - batch_no
+  - batch_id
+  - version
+  - _version
+  - ver
+  - partition_key
+  - data_source1
+  - data_source2
+  - data_source3
+  - zui_hou_geng_xin_shi_jian
+  - dt
+  - sbdwxzqh
+  - cz
+  - etltime
+  - yu_liu_zi_duan_2
+  - yu_liu_zi_duan_3
+  - yu_liu_zi_duan_4
+  - yu_liu_zi_duan_5
+  - yu_liu_zi_duan_6
+  - yu_liu_zi_duan_7
+  - yu_liu_zi_duan_8
+  - msisdn_1
+  - yu_liu_zi_duan_1
+  - sid
+  - create_time
+  - reserved1
+  - number_1
+  - reserved2
+  - reserved
+  - reserved3
+  - xjrksj
+  - czrxm
+  - czdwmc
+  - sjlybsdm
+  - hqbsdm
+  - hqsj
+  - clue_dst_sys
+  - saved_time
+  - bgsj_rqsj
+  - jlsj
+  - cxsj
+  - czdw
+  - czr
+  - czsj
+  - czbs
+name_patterns:
+  # 保留字段（业务设计上预留空字段）
+  - reserved_field*
+  - reserve_field*
+  - reserved_*
+  - spare_*
+  - bei_yong_zi_duan_*
+  - spare_col_*
+  - etl_*
+  - sys_*_time
+  - _sys_*
+  - ordinal*
+table_field_pairs:
+  - table_en: ysk_01003_zjcc_001_lhcz_ai_model_test
+    field_name: personrelate_tptype_name
+    reason: W5-E detect score=0.85 reasons=comment_kw=废弃|empty_and_unused
+  - table_en: ysk_01003_zjcc_001_lhcz_ai_model_test
+    field_name: personrelate_level
+    reason: W5-E detect score=0.85 reasons=comment_kw=废弃|empty_and_unused
+  - table_en: ysk_01003_zjcc_001_lhcz_ai_model_test
+    field_name: personrelate_tptitle
+    reason: W5-E detect score=0.85 reasons=comment_kw=废弃|empty_and_unused
+  - table_en: ysk_01006_gxrxx_001_lhcz_ai_model_test
+    field_name: old_sqid
+    reason: W5-E detect score=0.8 reasons=comment_kw=保留|no_usage|tmp_debug_field
+  - table_en: ysk_01003_yjzlzb_001_lhcz_ai_model_test
+    field_name: is_tm
+    reason: W5-E detect score=0.75 reasons=boolean_prefix|comment_kw=预留|no_usage
+  - table_en: nb_tab_crjjwrylszs_lhcz_ai_model_test
+    field_name: old_name
+    reason: W5-E detect score=0.75 reasons=empty_and_unused|tmp_debug_field
+  - table_en: ysk_01003_zfwybjfymxb_001_lhcz_ai_model_test
+    field_name: hosp_prep_flag
+    reason: W5-E detect score=0.7 reasons=empty_and_unused|flag_suffix
+  - table_en: ysk_01003_zfwybjfymxb_001_lhcz_ai_model_test
+    field_name: prcu_drug_flag
+    reason: W5-E detect score=0.7 reasons=empty_and_unused|flag_suffix
+  - table_en: ysk_01003_zfwybjfymxb_001_lhcz_ai_model_test
+    field_name: chld_medc_flag
+    reason: W5-E detect score=0.7 reasons=empty_and_unused|flag_suffix
+  - table_en: ysk_01003_zfwybjfymxb_001_lhcz_ai_model_test
+    field_name: list_sp_item_flag
+    reason: W5-E detect score=0.7 reasons=empty_and_unused|flag_suffix
+  - table_en: ysk_01003_zfwybjfymxb_001_lhcz_ai_model_test
+    field_name: rx_circ_flag
+    reason: W5-E detect score=0.7 reasons=empty_and_unused|flag_suffix
+  - table_en: lhcz_lyl_hkjd_jdcj_fwsyjsj_lhcz_ai_model_test
+    field_name: combine_flag
+    reason: W5-E detect score=0.7 reasons=empty_and_unused|flag_suffix
+  - table_en: ysk_01003_jgjbxx_001_lhcz_ai_model_test
+    field_name: f_id
+    reason: W5-E detect score=0.7 reasons=boolean_prefix|empty_and_unused
+  - table_en: ysk_01003_jgjbxx_001_lhcz_ai_model_test
+    field_name: f_code
+    reason: W5-E detect score=0.7 reasons=boolean_prefix|empty_and_unused
+  - table_en: ysk_01003_jgjbxx_001_lhcz_ai_model_test
+    field_name: f_city_code
+    reason: W5-E detect score=0.7 reasons=boolean_prefix|empty_and_unused
+  - table_en: ysk_01003_jgjbxx_001_lhcz_ai_model_test
+    field_name: f_county_code
+    reason: W5-E detect score=0.7 reasons=boolean_prefix|empty_and_unused
+  - table_en: ysk_01003_jgjbxx_001_lhcz_ai_model_test
+    field_name: f_policemen
+    reason: W5-E detect score=0.7 reasons=boolean_prefix|empty_and_unused
+  - table_en: ysk_01003_jgjbxx_001_lhcz_ai_model_test
+    field_name: f_th_number
+    reason: W5-E detect score=0.7 reasons=boolean_prefix|empty_and_unused
+  - table_en: nb_tab_jj_jjjtwfjl_lhcz_ai_model_test
+    field_name: is_special_case
+    reason: W5-E detect score=0.7 reasons=boolean_prefix|empty_and_unused
+  - table_en: ysk_01003_yjyd_001_lhcz_ai_model_test
+    field_name: rsrv11
+    reason: W5-E detect score=0.65 reasons=comment_kw=预留|empty_and_unused
+  - table_en: ysk_01003_yjyd_001_lhcz_ai_model_test
+    field_name: rsrv12
+    reason: W5-E detect score=0.65 reasons=comment_kw=预留|empty_and_unused
+  - table_en: ysk_01003_yjyd_001_lhcz_ai_model_test
+    field_name: rsrv13
+    reason: W5-E detect score=0.65 reasons=comment_kw=预留|empty_and_unused
+  - table_en: ysk_01003_yjyd_001_lhcz_ai_model_test
+    field_name: rsrv14
+    reason: W5-E detect score=0.65 reasons=comment_kw=预留|empty_and_unused
+  - table_en: ysk_01003_yjyd_001_lhcz_ai_model_test
+    field_name: rsrv15
+    reason: W5-E detect score=0.65 reasons=comment_kw=预留|empty_and_unused
+  - table_en: ysk_01003_yjyd_001_lhcz_ai_model_test
+    field_name: rsrv16
+    reason: W5-E detect score=0.65 reasons=comment_kw=预留|empty_and_unused
+  - table_en: ysk_01003_yjyd_001_lhcz_ai_model_test
+    field_name: rsrv17
+    reason: W5-E detect score=0.65 reasons=comment_kw=预留|empty_and_unused
+  - table_en: ysk_01003_yjyd_001_lhcz_ai_model_test
+    field_name: rsrv18
+    reason: W5-E detect score=0.65 reasons=comment_kw=预留|empty_and_unused
+  - table_en: ysk_01003_yjyd_001_lhcz_ai_model_test
+    field_name: rsrv19
+    reason: W5-E detect score=0.65 reasons=comment_kw=预留|empty_and_unused
+  - table_en: ysk_01003_yjyd_001_lhcz_ai_model_test
+    field_name: rsrv20
+    reason: W5-E detect score=0.65 reasons=comment_kw=预留|empty_and_unused
+  - table_en: lhcz_zyp_hegs_dgdw_lhcz_ai_model_test
+    field_name: rtspmm
+    reason: W5-E detect score=0.65 reasons=comment_kw=密码|empty_and_unused
+  - table_en: cardno_lbsuuid_relate_result_highvalue_lhcz_ai_model_test
+    field_name: partition_column_0
+    reason: W5-E detect score=0.65 reasons=dup_suffix|empty_and_unused
+  - table_en: ysk_01003_zjcc_001_lhcz_ai_model_test
+    field_name: personrelate_tptype
+    reason: W5-E detect score=0.6 reasons=comment_kw=废弃|no_usage
+  - table_en: ysk_99000_wjrgkrybnew_001_lhcz_ai_model_test
+    field_name: byzd3
+    reason: W5-E detect score=0.6 reasons=all_samples_null|comment_kw=备用
+  - table_en: ysk_99000_wjrgkrybnew_001_lhcz_ai_model_test
+    field_name: byzd4
+    reason: W5-E detect score=0.6 reasons=all_samples_null|comment_kw=备用
+  - table_en: nb_tab_mh_mhzjdzsjxx_lhcz_ai_model_test
+    field_name: latitude_1
+    reason: W5-E detect score=0.65 reasons=dup_suffix|empty_and_unused
+  - table_en: ztk_yth_yongdianyichang_lhcz_ai_model_test
+    field_name: gxr_msisdn_1
+    reason: W5-E detect score=0.65 reasons=dup_suffix|empty_and_unused
+  - table_en: ysk_01003_yjyd_001_lhcz_ai_model_test
+    field_name: secret
+    reason: W5-E detect score=0.55 reasons=no_usage|secret_password
+  - table_en: ysk_01003_yjyd_001_lhcz_ai_model_test
+    field_name: create_by
+    reason: W5-E detect score=0.5 reasons=no_usage|sys_timestamp_pattern
+  - table_en: ysk_01003_yjyd_001_lhcz_ai_model_test
+    field_name: update_by
+    reason: W5-E detect score=0.5 reasons=no_usage|sys_timestamp_pattern
+  - table_en: ysk_01003_yjyd_001_lhcz_ai_model_test
+    field_name: update_date
+    reason: W5-E detect score=0.5 reasons=no_usage|sys_timestamp_pattern
+  - table_en: key_individual_swazdr_lhcz_ai_model_test
+    field_name: create_id
+    reason: W5-E detect score=0.5 reasons=no_usage|sys_timestamp_pattern
+  - table_en: key_individual_swazdr_lhcz_ai_model_test
+    field_name: update_at
+    reason: W5-E detect score=0.5 reasons=no_usage|sys_timestamp_pattern
+  - table_en: ysk_01006_jwrylszsxx_001_lhcz_ai_model_test
+    field_name: old_lzrydjid
+    reason: W5-E detect score=0.5 reasons=no_usage|tmp_debug_field
+  - table_en: ysk_01003_jgjbxx_001_lhcz_ai_model_test
+    field_name: old_zaid
+    reason: W5-E detect score=0.5 reasons=no_usage|tmp_debug_field
+  - table_en: ysk_01003_czjwry_001_lhcz_ai_model_test
+    field_name: old_ywid
+    reason: W5-E detect score=0.5 reasons=no_usage|tmp_debug_field
+  - table_en: ysk_01003_zfwybjfymxb_001_lhcz_ai_model_test
+    field_name: rid
+    reason: W5-E detect score=0.45 reasons=no_usage|short_id
+  - table_en: ysk_01003_yjyd_001_lhcz_ai_model_test
+    field_name: del_flag
+    reason: W5-E detect score=0.45 reasons=flag_suffix|no_usage
+  - table_en: mxgl_yw_rujiang_chujiang_20250217_lhcz_ai_model_test
+    field_name: is_xjj
+    reason: W5-E detect score=0.45 reasons=boolean_prefix|no_usage
+  - table_en: ysk_01003_yjyd_001_lhcz_ai_model_test
+    field_name: rsrv7
+    reason: W5-E detect score=0.4 reasons=comment_kw=预留|no_usage
+  - table_en: ysk_01003_yjyd_001_lhcz_ai_model_test
+    field_name: rsrv8
+    reason: W5-E detect score=0.4 reasons=comment_kw=预留|no_usage
+  - table_en: ysk_01003_yjyd_001_lhcz_ai_model_test
+    field_name: rsrv9
+    reason: W5-E detect score=0.4 reasons=comment_kw=预留|no_usage
+  - table_en: ysk_01003_yjyd_001_lhcz_ai_model_test
+    field_name: rsrv10
+    reason: W5-E detect score=0.4 reasons=comment_kw=预留|no_usage
+  - table_en: nb_tab_rst_rstgrcbxx_lhcz_ai_model_test
+    field_name: y_k_l_0_0_1
+    reason: W5-E detect score=0.4 reasons=dup_suffix|no_usage
+  - table_en: lhcz_lyl_hkjd_jdcj_fwsyjsj_lhcz_ai_model_test
+    field_name: xtmc
+    reason: W5-E detect score=0.4 reasons=comment_kw=预留|no_usage
+  - table_en: lhcz_lyl_hkjd_jdcj_fwsyjsj_lhcz_ai_model_test
+    field_name: dlmc
+    reason: W5-E detect score=0.4 reasons=comment_kw=预留|no_usage
+  - table_en: lhcz_lyl_hkjd_jdcj_fwsyjsj_lhcz_ai_model_test
+    field_name: zymc
+    reason: W5-E detect score=0.4 reasons=comment_kw=预留|no_usage
+  - table_en: lhcz_lyl_hkjd_jdcj_fwsyjsj_lhcz_ai_model_test
+    field_name: xcmc
+    reason: W5-E detect score=0.4 reasons=comment_kw=预留|no_usage
+  - table_en: nb_tab_jj_jjjdcjbxx_lhcz_ai_model_test
+    field_name: lai_li_ping_zheng_1
+    reason: W5-E detect score=0.4 reasons=dup_suffix|no_usage
+  - table_en: nb_tab_jj_jjjdcjbxx_lhcz_ai_model_test
+    field_name: lai_li_ping_zheng_2
+    reason: W5-E detect score=0.4 reasons=dup_suffix|no_usage
+  - table_en: nb_tab_jj_jjjdcjbxx_lhcz_ai_model_test
+    field_name: ping_zheng_bian_hao_1
+    reason: W5-E detect score=0.4 reasons=dup_suffix|no_usage
+  - table_en: nb_tab_jj_jjjdcjbxx_lhcz_ai_model_test
+    field_name: ping_zheng_bian_hao_2
+    reason: W5-E detect score=0.4 reasons=dup_suffix|no_usage
+  - table_en: nb_tab_jj_jjjtwfjl_lhcz_ai_model_test
+    field_name: jing_ban_ren_1
+    reason: W5-E detect score=0.4 reasons=dup_suffix|no_usage
+  - table_en: nb_tab_jj_jjjtwfjl_lhcz_ai_model_test
+    field_name: jing_ban_ren_2
+    reason: W5-E detect score=0.4 reasons=dup_suffix|no_usage

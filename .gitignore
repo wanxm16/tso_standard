@@ -1,1 +1,49 @@
 .DS_Store
+
+# 环境变量与密钥
+.env
+.env.local
+.env.*.local
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.venv/
+venv/
+.ipynb_checkpoints/
+
+# Node
+node_modules/
+dist/
+.vite/
+.turbo/
+
+# 输出物（视情况调整）
+output/
+
+# 协作文档 / 任务记录 / 需求文档（不纳入代码仓库）
+requirement/
+tasks/
+CLAUDE.md
+
+# 截图 / 图片（review / QA 过程中生成）
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.webp
+
+# 运行时缓存 / 快照 / MCP 工具产物
+.llm_cache/
+.alignment_snapshots/
+.playwright-mcp/
+snap_current.yml
+
+# 临时备份
+*.bak
+*.bak_*
+*_before_edit.*
+*_before_prune.*
+*.backfill_bak

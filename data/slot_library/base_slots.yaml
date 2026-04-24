@@ -1,0 +1,1837 @@
+# 基础跨域语义槽位字典
+#
+# 作用：为虚拟表提供可复用的"字段位置语义定义"。后续字段归一阶段 (I-02/I-03)
+# 的目标，就是为每个物理字段找到最匹配的槽位；每个虚拟表 (I-01 产物)
+# 会基于这些槽位再按需扩展 extended 槽位。
+#
+# 设计文档锚点：
+#   § 10.3 字段角色（10 种）：subject / relation_subject / subject_id / display /
+#          time / location / measure / filter / source / description
+#   § 10.7 高价值 logical_type（15 种）：person_name / id_card_no / passport_no /
+#          phone_no / vehicle_plate_no / datetime / region_code / address /
+#          track_point_name / relation_type / case_no / status_code /
+#          source_system / amount / count
+#
+# 字段说明：
+#   name                   槽位英文名（snake_case，全局唯一）
+#   cn_name                中文名（主展示）
+#   logical_type           15 种高价值 type + 少量扩展；I-02 打分依据之一
+#   role                   字段角色，见 § 10.3
+#   description            一句话说明该槽位代表什么
+#   aliases                中/英/拼音/缩写同义词集合；I-02 lexical_score 依据
+#   sample_patterns        有稳定正则的类型才给（身份证/手机/日期等）；无规则给 []
+#   applicable_table_types 该槽位适用于哪些 VT 类型（主档/关系/事件/标签/聚合）
+
+base_slots:
+
+  # ========== 主语与标识类（§ 10.3 subject / subject_id / relation_subject） ==========
+
+  - name: person_name
+    cn_name: 姓名
+    logical_type: person_name
+    role: display
+    description: 自然人姓名
+    aliases: [姓名, 名字, 人名, 本人姓名, 中文姓名, xm, xing_ming, crj_xing_ming, ming]
+    sample_patterns: []
+    applicable_table_types: [主档, 关系, 事件, 标签, 聚合]
+
+  - name: certificate_no
+    cn_name: 证件号
+    logical_type: id_card_no_or_passport
+    role: subject_id
+    description: 自然人证件号（身份证/护照/港澳台证件等）
+    aliases: [身份证号, 身份证号码, 公民身份号码, 证件号, 证件号码, 居民身份证号, sfzh, gmsfhm, zjhm, zheng_jian_hao]
+    sample_patterns:
+      - name: id_card_18
+        regex: '^[1-9]\d{5}(19|20)\d{2}(0[1-9]|1[0-2])(0[1-9]|[12]\d|3[01])\d{3}[\dXx]$'
+      - name: id_card_15
+        regex: '^[1-9]\d{5}\d{2}(0[1-9]|1[0-2])(0[1-9]|[12]\d|3[01])\d{3}$'
+    applicable_table_types: [主档, 关系, 事件, 标签, 聚合]
+
+  - name: passport_no
+    cn_name: 护照号
+    logical_type: passport_no
+    role: subject_id
+    description: 护照号码（外籍/中国公民护照）
+    aliases: [护照号, 护照号码, hzh, hz_hao, passport]
+    sample_patterns:
+      - name: cn_passport
+        regex: '^[EeGgPpSsDdMm]\d{8}$'
+      - name: generic_passport
+        regex: '^[A-Z]\d{7,9}$'
+    applicable_table_types: [主档, 关系, 事件, 标签]
+
+  - name: phone_no
+    cn_name: 手机号
+    logical_type: phone_no
+    role: subject_id
+    description: 中国大陆手机号
+    aliases: [手机号, 手机号码, 电话, 联系电话, 联系方式, 号码, sjh, sjhm, phone]
+    sample_patterns:
+      - name: cn_mobile
+        regex: '^1[3-9]\d{9}$'
+    applicable_table_types: [主档, 关系, 事件, 标签]
+
+  - name: vehicle_plate_no
+    cn_name: 车牌号
+    logical_type: vehicle_plate_no
+    role: subject_id
+    description: 机动车/电动车车牌号
+    aliases: [车牌号, 车牌, 号牌, 车牌号码, 号牌号码, cph, hphm, plate, hpzl]
+    sample_patterns:
+      - name: cn_plate_blue
+        regex: '^[京津沪渝冀豫云辽黑湘皖鲁新苏浙赣鄂桂甘晋蒙陕吉闽贵粤青藏川宁琼][A-Z][A-HJ-NP-Z0-9]{4,5}$'
+      - name: cn_plate_green
+        regex: '^[京津沪渝冀豫云辽黑湘皖鲁新苏浙赣鄂桂甘晋蒙陕吉闽贵粤青藏川宁琼][A-Z][DF][A-HJ-NP-Z0-9]{5}$'
+    applicable_table_types: [主档, 关系, 事件, 标签]
+
+  - name: vin_no
+    cn_name: 车辆识别代码
+    logical_type: vin_no
+    role: subject_id
+    description: 车架号 / VIN
+    aliases: [vin, 车架号, 车辆识别代码, cjh, vin_code]
+    sample_patterns:
+      - name: vin
+        regex: '^[A-HJ-NPR-Z0-9]{17}$'
+    applicable_table_types: [主档, 事件]
+
+  - name: device_id
+    cn_name: 设备标识
+    logical_type: device_id
+    role: subject_id
+    description: 设备唯一标识（IMEI/IMSI/MAC/IDFA 等）
+    aliases: [设备id, 设备号, imei, imsi, mac, idfa, oaid, mac地址, sbid, sb_id, terminal_id, uuid]
+    sample_patterns:
+      - name: imei
+        regex: '^\d{14,16}$'
+      - name: mac
+        regex: '^([0-9A-Fa-f]{2}[:-]){5}[0-9A-Fa-f]{2}$'
+    applicable_table_types: [主档, 关系, 事件]
+
+  - name: case_no
+    cn_name: 案件编号
+    logical_type: case_no
+    role: subject_id
+    description: 案件编号 / 接警编号 / 警情编号
+    aliases: [案件编号, 案件号, 案号, 警情编号, 接警编号, jjbh, ajbh, ah, case_id]
+    sample_patterns: []
+    applicable_table_types: [主档, 事件, 关系]
+
+  - name: organization_id
+    cn_name: 机构标识
+    logical_type: organization_id
+    role: subject_id
+    description: 企业 / 组织 / 机构的统一标识（统一社会信用代码/机构代码）
+    aliases: [机构代码, 机构号, 统一社会信用代码, 社会信用代码, jg_id, jgdm, jgbh, org_id]
+    sample_patterns:
+      - name: social_credit
+        regex: '^[0-9A-HJ-NPQRTUWXY]{2}\d{6}[0-9A-HJ-NPQRTUWXY]{10}$'
+    applicable_table_types: [主档]
+
+  - name: relation_type
+    cn_name: 关系类型
+    logical_type: relation_type
+    role: subject
+    description: 人与人/人与物的关系种类（婚姻/亲属/同行/共现等）
+    aliases: [关系类型, 关系, 亲属关系, 关系种类, gxlx, guanxi, relation, relation_kind]
+    sample_patterns: []
+    applicable_table_types: [关系]
+
+  - name: counterpart_certificate_no
+    cn_name: 关联人证件号
+    logical_type: id_card_no_or_passport
+    role: relation_subject
+    description: 关系表中"另一方"的证件号（如婚姻关系中的配偶）
+    aliases: [对方身份证, 对方证件号, 配偶身份证, 亲属身份证, 关联人身份证, dfsfzh, gx_sfzh, other_certificate_no]
+    sample_patterns:
+      - name: id_card_18
+        regex: '^[1-9]\d{5}(19|20)\d{2}(0[1-9]|1[0-2])(0[1-9]|[12]\d|3[01])\d{3}[\dXx]$'
+    applicable_table_types: [关系]
+
+  - name: counterpart_name
+    cn_name: 关联人姓名
+    logical_type: person_name
+    role: relation_subject
+    description: 关系表中"另一方"的姓名
+    aliases: [对方姓名, 配偶姓名, 亲属姓名, 关联人姓名, dfxm, gx_xm, other_name]
+    sample_patterns: []
+    applicable_table_types: [关系]
+
+  # ========== 时间类（§ 10.3 time） ==========
+
+  - name: event_time
+    cn_name: 事件时间
+    logical_type: datetime
+    role: time
+    description: 事件/行为发生时间（出入境/加油/通行/通话等）
+    aliases: [事件时间, 发生时间, 行为时间, 采集时间, 交易时间, 通行时间, 出入境时间, 登记时间, sj, shijian, event_time, occur_time, record_time]
+    sample_patterns:
+      - name: datetime_iso
+        regex: '^\d{4}-\d{2}-\d{2}[ T]\d{2}:\d{2}:\d{2}'
+      - name: datetime_compact
+        regex: '^\d{8}\d{6}$'
+      - name: timestamp_ms
+        regex: '^\d{13}$'
+    applicable_table_types: [事件, 聚合, 关系]
+
+  - name: start_time
+    cn_name: 开始时间
+    logical_type: datetime
+    role: time
+    description: 时间段起点（入所时间/入住时间/轨迹开始等）
+    aliases: [开始时间, 起始时间, 入所时间, 入住时间, 入境时间, ksj, kssj, start_time]
+    sample_patterns:
+      - name: datetime_iso
+        regex: '^\d{4}-\d{2}-\d{2}[ T]\d{2}:\d{2}:\d{2}'
+    applicable_table_types: [事件, 聚合]
+
+  - name: end_time
+    cn_name: 结束时间
+    logical_type: datetime
+    role: time
+    description: 时间段终点（出所时间/离开时间/轨迹结束等）
+    aliases: [结束时间, 终止时间, 出所时间, 离开时间, 离境时间, jssj, end_time]
+    sample_patterns:
+      - name: datetime_iso
+        regex: '^\d{4}-\d{2}-\d{2}[ T]\d{2}:\d{2}:\d{2}'
+    applicable_table_types: [事件, 聚合]
+
+  - name: birth_date
+    cn_name: 出生日期
+    logical_type: date
+    role: time
+    description: 自然人出生日期
+    aliases: [出生日期, 出生年月, 生日, csrq, birthday, birth_date]
+    sample_patterns:
+      - name: date_iso
+        regex: '^\d{4}-\d{2}-\d{2}$'
+      - name: date_compact
+        regex: '^\d{8}$'
+    applicable_table_types: [主档]
+
+  - name: create_time
+    cn_name: 数据创建时间
+    logical_type: datetime
+    role: time
+    description: 数据记录创建/入库时间（非业务时间）
+    aliases: [创建时间, 入库时间, 录入时间, cjsj, crttime, create_time, etl_time]
+    sample_patterns:
+      - name: datetime_iso
+        regex: '^\d{4}-\d{2}-\d{2}[ T]\d{2}:\d{2}:\d{2}'
+    applicable_table_types: [主档, 关系, 事件, 聚合, 标签]
+
+  # ========== 地点类（§ 10.3 location） ==========
+
+  - name: event_location
+    cn_name: 事件地点
+    logical_type: address
+    role: location
+    description: 事件/行为发生的具体地点（描述文本）
+    aliases: [事件地点, 发生地点, 地点, 位置, 地址, 活动地点, 通行地点, didian, dd, event_location, occur_location]
+    sample_patterns: []
+    applicable_table_types: [事件, 聚合, 关系]
+
+  - name: person_address
+    cn_name: 人员地址
+    logical_type: address
+    role: location
+    description: 人员相关地址（户籍/现住/工作/暂住等）
+    aliases: [户籍地址, 现住地址, 常住地址, 暂住地址, 工作地址, 家庭住址, hjdz, xzdz, zz, address, home_address]
+    sample_patterns: []
+    applicable_table_types: [主档]
+
+  - name: region_code
+    cn_name: 行政区划代码
+    logical_type: region_code
+    role: location
+    description: 标准行政区划编码（省、市、区县等国标区划代码）
+    aliases: [行政区划, 行政区划代码, 区划代码, 地区代码, 区县代码, 省市区县, 省市县区, region_code, area_code, district_code, sheng_shi_xian_qu]
+    sample_patterns:
+      - name: region_code_6
+        regex: '^\d{6}$'
+      - name: region_code_9
+        regex: '^\d{9}$'
+      - name: region_code_12
+        regex: '^\d{12}$'
+    applicable_table_types: [主档, 关系, 事件, 标签, 聚合]
+
+  - name: port_name
+    cn_name: 口岸/点位名称
+    logical_type: track_point_name
+    role: location
+    description: 出入境口岸/检查站/卡口/地感点位等地理点名称
+    aliases: [口岸, 口岸名称, 检查站, 卡口, 点位, 点位名称, 站点, 站点名称, kouan, kybh, dwmc, port_name]
+    sample_patterns: []
+    applicable_table_types: [事件, 聚合]
+
+  - name: longitude
+    cn_name: 经度
+    logical_type: coordinate
+    role: location
+    description: WGS84/GCJ02 经度
+    aliases: [经度, longitude, lng, lon, jd]
+    sample_patterns:
+      - name: longitude_decimal
+        regex: '^-?(1[0-7]\d(\.\d+)?|180(\.0+)?|\d{1,2}(\.\d+)?)$'
+    applicable_table_types: [事件]
+
+  - name: latitude
+    cn_name: 纬度
+    logical_type: coordinate
+    role: location
+    description: WGS84/GCJ02 纬度
+    aliases: [纬度, latitude, lat, wd]
+    sample_patterns:
+      - name: latitude_decimal
+        regex: '^-?([0-8]\d(\.\d+)?|90(\.0+)?)$'
+    applicable_table_types: [事件]
+
+  # ========== 状态与类型类（§ 10.3 filter） ==========
+
+  - name: status_code
+    cn_name: 状态/类型
+    logical_type: status_code
+    role: filter
+    description: 业务状态码（枚举值）：案件状态/通行方向/旅客类型/标签类别等
+    aliases: [状态, 标记, 类型, 类别, 等级, 级别, 性质, 标签, 方向, 是否, zt, lx, lb, fx, status, type, flag]
+    sample_patterns: []
+    applicable_table_types: [事件, 标签, 主档]
+
+  - name: gender
+    cn_name: 性别
+    logical_type: status_code
+    role: filter
+    description: 性别枚举（男/女/未知）
+    aliases: [性别, xb, gender, sex]
+    sample_patterns:
+      - name: gender_text
+        regex: '^(男|女|未知|M|F|1|2|0|9)$'
+    applicable_table_types: [主档]
+
+  - name: nationality
+    cn_name: 国籍/民族
+    logical_type: status_code
+    role: filter
+    description: 国籍代码或民族（中国/外籍/少数民族等）
+    aliases:
+      - 国籍
+      - 国家
+      - gj
+      - nationality
+    sample_patterns: []
+    applicable_table_types: [主档, 事件]
+
+  # ========== 统计类（§ 10.3 measure） ==========
+
+  - name: amount
+    cn_name: 金额
+    logical_type: amount
+    role: measure
+    description: 交易/消费/费用金额（货币）
+    aliases: [金额, 钱数, 费用, 价格, 交易金额, 消费金额, je, money, amount, price]
+    sample_patterns:
+      - name: decimal_money
+        regex: '^-?\d+(\.\d{1,4})?$'
+    applicable_table_types: [事件, 聚合]
+
+  - name: count_value
+    cn_name: 次数/数量
+    logical_type: count
+    role: measure
+    description: 次数/数量/频次统计值
+    aliases: [次数, 数量, 频次, 累计次数, cs, sl, count, num, freq]
+    sample_patterns:
+      - name: integer
+        regex: '^\d+$'
+    applicable_table_types: [聚合]
+  - name: education_level
+    cn_name: 文化程度
+    logical_type: status_code
+    role: filter
+    description: 跨 4 个 VT 复用的 extended 槽位，建议升格为 base
+    aliases:
+      - edu_level
+      - education
+      - education_level
+      - wen_hua_cheng_du
+      - wen_hua_cheng_du_ming_cheng
+      - whcd
+      - xldm
+      - 学历
+      - 学历代码
+      - 教育水平
+      - 文化水平
+      - 文化程度
+    sample_patterns: []
+    applicable_table_types:
+      - 主档
+      - 关系
+      - 事件
+      - 标签
+      - 聚合
+  - name: occupation
+    cn_name: 职业/职务
+    logical_type: free_text
+    role: filter
+    description: 跨 5 个 VT 复用的 extended 槽位，建议升格为 base
+    aliases:
+      - duties
+      - job
+      - occupation
+      - occupation_type
+      - zhi_wu
+      - zhi_ye
+      - zhiye
+      - zy
+      - 工作性质
+      - 工作类型
+      - 职业
+      - 职业/职务
+      - 职务
+    sample_patterns: []
+    applicable_table_types:
+      - 主档
+      - 关系
+      - 事件
+      - 标签
+      - 聚合
+  - name: document_type
+    cn_name: 证件种类
+    logical_type: code
+    role: filter
+    description: 跨 6 个 VT 复用的 extended 槽位，建议升格为 base
+    aliases:
+      - crj_zheng_jian_lei_xing
+      - crj_zheng_jian_ming_cheng
+      - document_category
+      - document_type
+      - document_type_code
+      - zheng_jian_lei_xing
+      - zjzl
+      - 出入境证件类型
+      - 所持证件
+      - 旅行证件种类
+      - 证件种类
+      - 证件类别
+      - 证件类型
+      - 通行证件类型
+    sample_patterns: []
+    applicable_table_types:
+      - 主档
+      - 关系
+      - 事件
+      - 标签
+      - 聚合
+  - name: political_status
+    cn_name: 政治面貌
+    logical_type: status_code
+    role: filter
+    description: 跨 3 个 VT 复用的 extended 槽位，建议升格为 base
+    aliases:
+      - party_affiliation
+      - political_affiliation
+      - political_status
+      - zheng_zhi_mian_mao
+      - zzmm
+      - zzmmdm
+      - 党派信息
+      - 政治身份
+      - 政治面貌
+    sample_patterns: []
+    applicable_table_types:
+      - 主档
+      - 关系
+      - 事件
+      - 标签
+      - 聚合
+  - name: household_id
+    cn_name: 户号
+    logical_type: household_id
+    role: subject_id
+    description: 跨 3 个 VT 复用的 extended 槽位，建议升格为 base
+    aliases:
+      - hu_hao
+      - huhao
+      - 户口编号
+      - 户号
+      - 户号ID
+      - 户籍户号
+      - 户籍编号
+    sample_patterns: []
+    applicable_table_types:
+      - 主档
+      - 关系
+      - 事件
+      - 标签
+      - 聚合
+  - name: visa_type
+    cn_name: 签证种类
+    logical_type: visa_type_code
+    role: filter
+    description: 跨 9 个 VT 复用的 extended 槽位，建议升格为 base
+    aliases:
+      - bjqzzl
+      - qian_zheng_lei_xing
+      - qian_zheng_lei_xing_ming_cheng
+      - qianzheng_leixing
+      - qzl
+      - qzlx
+      - qzzl
+      - qzzldm
+      - visa_category
+      - visa_kind
+      - visa_type
+      - 签注类型
+      - 签证代码
+      - 签证型别
+      - 签证性质
+      - 签证种类
+      - 签证类别
+      - 签证类型
+      - 签证类型名称
+    sample_patterns: []
+    applicable_table_types:
+      - 主档
+      - 关系
+      - 事件
+      - 标签
+      - 聚合
+  - name: release_reason
+    cn_name: 出所（监）原因
+    logical_type: status_code
+    role: filter
+    description: 跨 3 个 VT 复用的 extended 槽位，建议升格为 base
+    aliases:
+      - csyy
+      - 出所原因
+      - 出所（监）原因
+      - 出监原因
+      - 刑满释放原因
+      - 离所事由
+      - 解除羁押原因
+      - 释放事由
+      - 释放原因
+    sample_patterns: []
+    applicable_table_types:
+      - 主档
+      - 关系
+      - 事件
+      - 标签
+      - 聚合
+  - name: case_category
+    cn_name: 案件类别
+    logical_type: status_code
+    role: filter
+    description: 跨 3 个 VT 复用的 extended 槽位，建议升格为 base
+    aliases:
+      - ajlb
+      - an_jian_lei_bie
+      - case_type
+      - gd_kind
+      - sq_type
+      - 事件类别
+      - 工单类型
+      - 案件分类
+      - 案件类别
+      - 案件类型
+      - 案类
+      - 诉求类型
+    sample_patterns: []
+    applicable_table_types:
+      - 主档
+      - 关系
+      - 事件
+      - 标签
+      - 聚合
+  - name: device_model
+    cn_name: 设备机型
+    logical_type: free_text
+    role: display
+    description: 跨 4 个 VT 复用的 extended 槽位，建议升格为 base
+    aliases:
+      - device
+      - device_type
+      - model
+      - model_name
+      - sbxh
+      - she_bei_xing_hao
+      - shebei xinghao
+      - 型号
+      - 手机型号
+      - 机型
+      - 终端型号
+      - 设备型号
+      - 设备机型
+      - 设备规格
+    sample_patterns: []
+    applicable_table_types:
+      - 主档
+      - 关系
+      - 事件
+      - 标签
+      - 聚合
+  - name: person_category
+    cn_name: 人员类别
+    logical_type: status_code
+    role: filter
+    description: 跨 3 个 VT 复用的 extended 槽位，建议升格为 base
+    aliases:
+      - ren_yuan_lei_bie_ming_cheng
+      - rylb
+      - rylbmc
+      - 人员属性
+      - 人员标签
+      - 人员类别
+      - 人员类型
+      - 旅客类别
+      - 身份类别
+      - 重点人分类
+      - 重点人类型
+    sample_patterns: []
+    applicable_table_types:
+      - 主档
+      - 关系
+      - 事件
+      - 标签
+      - 聚合
+  - name: departure_station
+    cn_name: 出发站
+    logical_type: track_point_name
+    role: location
+    description: 跨 3 个 VT 复用的 extended 槽位，建议升格为 base
+    aliases:
+      - cfz
+      - chu_fa_zhan
+      - departure
+      - fa_che_zhan
+      - fa_zhan
+      - from_station
+      - 上车站
+      - 出发地
+      - 出发地车站
+      - 出发站
+      - 出发车站
+      - 发站
+      - 始发站
+    sample_patterns: []
+    applicable_table_types:
+      - 主档
+      - 关系
+      - 事件
+      - 标签
+      - 聚合
+  - name: arrival_station
+    cn_name: 到达站
+    logical_type: track_point_name
+    role: location
+    description: 跨 3 个 VT 复用的 extended 槽位，建议升格为 base
+    aliases:
+      - arrival
+      - da_da_zhan
+      - dao_zhan
+      - ddz
+      - to_station
+      - 下车站
+      - 到站
+      - 到达地
+      - 到达站
+      - 到达车站
+      - 目的地车站
+      - 终点站
+    sample_patterns: []
+    applicable_table_types:
+      - 主档
+      - 关系
+      - 事件
+      - 标签
+      - 聚合
+  - name: train_number
+    cn_name: 车次
+    logical_type: transport_trip_id
+    role: display
+    description: 跨 3 个 VT 复用的 extended 槽位，建议升格为 base
+    aliases:
+      - ban_ci
+      - che_ci
+      - train_code
+      - train_no
+      - 列车班次
+      - 列车编号
+      - 客运班次
+      - 班次
+      - 车号
+      - 车次
+      - 车次号
+    sample_patterns: []
+    applicable_table_types:
+      - 主档
+      - 关系
+      - 事件
+      - 标签
+      - 聚合
+  - name: seat_number
+    cn_name: 座位号
+    logical_type: seat_code
+    role: display
+    description: 跨 4 个 VT 复用的 extended 槽位，建议升格为 base
+    aliases:
+      - berth_number
+      - seat_no
+      - xi_wei_hao
+      - zuo_wei_hao
+      - zwh
+      - 席位号
+      - 座位号
+      - 座号
+      - 舱位座位
+    sample_patterns: []
+    applicable_table_types:
+      - 主档
+      - 关系
+      - 事件
+      - 标签
+      - 聚合
+  - name: flight_number
+    cn_name: 航班号
+    logical_type: flight_number
+    role: filter
+    description: 跨 3 个 VT 复用的 extended 槽位，建议升格为 base
+    aliases:
+      - ban_ci
+      - che_ci
+      - flight
+      - flight_no
+      - hang_ban_hao
+      - 班次
+      - 航班
+      - 航班号
+      - 航班号码
+      - 航班编号
+    sample_patterns: []
+    applicable_table_types:
+      - 主档
+      - 关系
+      - 事件
+      - 标签
+      - 聚合
+  - name: cross_border_direction
+    cn_name: 出入境方向
+    logical_type: status_code
+    role: filter
+    description: 跨 3 个 VT 复用的 extended 槽位，建议升格为 base
+    aliases:
+      - chu_ru_jing_biao_shi
+      - churujing_biaoshi
+      - crbz
+      - 入境出境标识
+      - 出入国方向
+      - 出入境方向
+      - 出入境标识
+      - 出入标志
+      - 跨境方向
+      - 跨境流向
+      - 进出境方向
+      - 进出方向
+    sample_patterns: []
+    applicable_table_types:
+      - 主档
+      - 关系
+      - 事件
+      - 标签
+      - 聚合
+  - name: vehicle_type
+    cn_name: 交通工具类型
+    logical_type: status_code
+    role: filter
+    description: 跨 4 个 VT 复用的 extended 槽位，建议升格为 base
+    aliases:
+      - che_liang_lei_xing
+      - cllx
+      - jtgjlxdm
+      - vehicle_type
+      - 交通工具类型
+      - 交通工具类型代码
+      - 交通载具类型
+      - 车型
+      - 车型类别
+      - 车种
+      - 车辆种类
+      - 车辆类型
+    sample_patterns: []
+    applicable_table_types:
+      - 主档
+      - 关系
+      - 事件
+      - 标签
+      - 聚合
+  - name: transport_mode
+    cn_name: 交通方式
+    logical_type: status_code
+    role: filter
+    description: 跨 6 个 VT 复用的 extended 槽位，建议升格为 base
+    aliases:
+      - ban_ci
+      - jiao_tong_fang_shi
+      - jiaotong_fangshi
+      - jtfsdm
+      - transport_type
+      - trip_mode_chara
+      - vehicle_type
+      - 交通工具
+      - 交通工具类型
+      - 交通方式
+      - 交通方式代码
+      - 出行方式
+      - 班次
+    sample_patterns: []
+    applicable_table_types:
+      - 主档
+      - 关系
+      - 事件
+      - 标签
+      - 聚合
+  - name: destination_country
+    cn_name: 前往国家/地区
+    logical_type: region_code
+    role: location
+    description: 跨 5 个 VT 复用的 extended 槽位，建议升格为 base
+    aliases:
+      - destination
+      - qian_wang_guo_jia
+      - 前往国家
+      - 前往国家/地区
+      - 前往国家地区
+      - 前往地
+      - 前往地国家
+      - 目的国
+      - 目的地国家
+    sample_patterns: []
+    applicable_table_types:
+      - 主档
+      - 关系
+      - 事件
+      - 标签
+      - 聚合
+  - name: visa_number
+    cn_name: 签证号码
+    logical_type: custom_visa_no
+    role: subject_id
+    description: 跨 3 个 VT 复用的 extended 槽位，建议升格为 base
+    aliases:
+      - qian_zheng_hao_ma
+      - qzjlxkh
+      - visa_no
+      - 签注号码
+      - 签证号
+      - 签证号码
+      - 签证编号
+      - 签证证件号
+    sample_patterns: []
+    applicable_table_types:
+      - 主档
+      - 关系
+      - 事件
+      - 标签
+      - 聚合
+  - name: registration_date
+    cn_name: 登记日期
+    logical_type: datetime
+    role: time
+    description: 记录事件或对象在系统中登记注册的时间点
+    aliases:
+      - 登记所有权名称
+      - wen_ti_shu_ju_lei_xing
+      - yong_tu_shu_xing_ming_cheng
+      - 用途属性名称
+      - zan_zhu_xing_zheng_qu_hua
+      - 暂住行政区划
+      - zan_zhu_you_zheng_bian_ma
+      - 暂住邮政编码
+      - zheng_bei_zhi_liang
+      - 整备质量
+      - zhi_deng_ji_zheng_shu_xing_shu
+      - 制登记证书行数
+      - zhi_zao_guo
+      - 制造国
+      - zhu_suo_xing_zheng_qu_hua
+      - 住所行政区划
+      - zhu_suo_you_zheng_bian_ma
+      - 住所邮政编码
+      - zhuan_xiang_fang_shi
+      - 转向方式
+      - zhun_qian_yin_zong_zhi_liang
+      - 准牵引总质量
+      - id_document_type_code
+      - 身份证件类型代码
+      - vehicle_category_name
+      - 车辆分类名称
+      - party_name
+      - 当事人姓名
+      - import_flag_name
+      - 导库标记名称
+      - road_type_name
+      - 道路类型名称
+      - penalty_amount
+      - 罚款金额
+      - road_administrative_level_name
+      - 公路行政等级名称
+      - road_administrative_level
+      - 公路行政等级
+      - vehicle_processing_object_flag_name
+      - 机动车处理对象标记名称
+      - vehicle_use_type_name
+      - 机动车使用性质名称
+      - record_type_name
+      - 记录类型名称
+      - payment_flag_name
+      - 交款标记名称
+      - handler_name_2
+      - 经办人2
+      - road_segment_type_name
+      - 路口路段类型名称
+      - driver_nature
+      - 驾驶人性质
+      - violation_penalty_points
+      - 违法记分数
+      - write_mode
+      - 写入模式
+      - birthplace_administrative_division_code
+      - 出生地行政区划编码
+      - on_duty_officer
+      - 执勤民警
+      - transfer_flag_name
+      - 转递标记名称
+      - registrar
+      - 登记人
+      - legal_representative_contact
+      - 法人联系电话
+      - suspect_regional_characteristics
+      - 案犯地域性特征
+      - case_operation_flag_name
+      - 案件操作标识名称
+      - case_investigation_form_unit
+      - 案件调查情况填表单位
+      - investigation_measures
+      - 侦查措施
+      - penalty_date_simplified_procedure
+      - 简易程序处罚日期
+      - case_investigation_unit_internal_flag
+      - 案件刑侦发案单位是否内部单位标识
+      - scene_investigated_flag
+      - 现场是否已勘察标识
+      - suspect_characteristics
+      - 嫌疑人特征描述
+      - case_supplement_flag
+      - 案件补录标识
+      - case_operation_flag
+      - 案件操作标识
+      - case_operator
+      - 案件操作人
+      - case_co_solved_flag
+      - 案件协破标识
+      - case_first_collaborative_breakthrough
+      - 案件首次协同破获标识
+      - case_analyst_name
+      - 案件分析人姓名
+      - case_group_size
+      - 案件集团人数
+      - involved_case_count
+      - 涉案案件数量
+      - case_solving_department
+      - 案件侦破部门
+      - case_crackdown_region
+      - 案件破案地区
+      - case_drug_control_review_result
+      - 案件禁毒审核结果
+      - case_progress_serial_no
+      - 案件进度序号
+      - case_classification_level
+      - 案件密级
+      - case_confidentiality_level
+      - is_cross_region_solved
+      - 是否异地破案
+      - case_methodology
+      - 案件使用方法
+      - case_industry_attribute
+      - 案件行业属性
+      - crime_location
+      - 作案地点
+      - case_modus_operandi
+      - 案件作案规律
+      - crime_entry_point
+      - 作案入口
+      - case_coordinate_z
+      - 案件坐标Z值
+      - case_direction
+      - 案件方位
+      - incident_floor_count
+      - 案发楼层数
+      - reporter_household_location
+      - 报案人户籍所在地
+      - reporter_certificate_type
+      - 报案人证件种类
+      - case_kind
+      - 案件类型
+      - revocation_reason
+      - 撤销原因
+      - crime_location_detail
+      - 犯罪具体部位
+      - crime_time_period
+      - 犯罪时间段
+      - second_trial_time
+      - 二审时间
+      - case_region
+      - 发案地域
+      - reporting_unit_type
+      - 发案单位类型
+      - collusion_party
+      - 勾结对象
+      - archiver
+      - 归档人
+      - rescued_children_count
+      - 解救儿童数量
+      - assessment_review_flag
+      - 考核审核标识
+      - approval_officer_name
+      - 立案批准人姓名
+      - case_file_count
+      - 案件卷宗数量
+      - involved_place_description
+      - 涉案场所描述
+      - case_solving_time_period
+      - 破案时间段
+      - process_step_name
+      - 审批环节
+      - jurisdiction_transfer_deadline
+      - report_flag
+      - 上报标识
+      - involved_country_region
+      - 涉及国家地区
+      - is_direct_bureau_case
+      - 是否直属分局办案
+      - handling_unit_phone
+      - 受理单位电话
+      - injured_count
+      - 受伤人数
+      - death_count
+      - 死亡人数
+      - loss_amount_rmb
+      - 损失金额（人民币）
+      - non_filing_reason
+      - 不予立案理由
+      - transfer_time
+      - 指定管辖移送时间
+      - investigation_method
+      - review_time
+      - 审核时间
+      - selection_target
+      - 选择对象
+      - selection_timing
+      - 选择时机
+      - direct_economic_loss
+      - 直接经济损失
+      - organizing_unit
+      - 主办单位
+      - crime_tool
+      - 作案工具
+      - perpetrator_count
+      - 作案人数
+      - case_motive
+      - 作案动机
+      - crime_motive
+      - case_category_name
+      - 案件类别名称
+      - alarm_call_time
+      - 报警电话时间
+      - alarm_form
+      - 报警形式
+      - reporter_residence_district
+      - 报警人户籍地区划
+      - address_street_name
+      - 住址街路巷名称
+      - police_feedback_time
+      - 处警反馈时间
+      - incident_category
+      - 处警类别
+      - occurrence_reason
+      - 发生原因
+      - updater
+      - 更新人
+      - hazard_incident_flags
+      - 危险事件标志（含爆炸、泄漏等）
+      - reporter_birth_date
+      - 报警人出生日期
+      - special_campaign_flag
+      - 专项斗争标志
+      - building_structure
+      - 建筑结构
+      - building_condition
+      - 建筑物情况
+      - rescued_women_count
+      - 解救妇女数量
+      - injured_rescued_count
+      - 救助伤员数量
+      - hazard_incident_flag
+      - 危险事件标志
+      - alarm_category_name
+      - 报警类别名称
+      - solved_criminal_case_count
+      - 破获刑事案件数
+      - solved_public_security_cases_count
+      - 破获治安案件数
+      - ignition_location
+      - 起火场所
+      - injured_count_minor
+      - 轻伤人数
+      - burning_location
+      - 燃烧部位
+      - involved_phone_name
+      - 涉及的手机名称
+      - casualty_destination
+      - 伤员去向
+      - involved_amount
+      - 涉案金额
+      - is_repeat_alarm
+      - 是否重复报警
+      - weather_condition
+      - 天气情况
+      - external_operation_flag
+      - 外部操作标识
+      - officer_id
+      - 接警员警号
+      - injured_count_severe
+      - 重伤人数
+      - apprehension_and_trial_time
+      - 抓获审判时间
+      - body_type
+      - 体型
+      - residence_city_code
+      - 实际居住地城市编码
+      - collection_location
+      - verification_method
+      - 核查方式
+      - migration_reason
+      - 人口流动事由
+      - contact_type
+      - 接触情况类型
+      - inflow_reason_type
+      - 流入事由类型
+      - household_police_station_code
+      - 户籍地派出所代码
+      - landline_phone
+      - 固定电话
+      - management_category
+      - 管理类别
+      - workplace_contact_phone
+      - 工作地联系电话
+      - household_location_type
+      - 户口所在地类型
+      - household_registration_district
+      - 户籍区划
+      - source_primary_key_field_name
+      - interest_or_specialty
+      - 兴趣或特长
+      - native_place
+      - 籍贯
+      - contraceptive_method
+      - 节育措施
+      - contraception_time
+      - 节育时间
+      - employer_contact_phone
+      - 就业单位联系电话
+      - unreachable_reason
+      - 无法联系原因
+      - residence_permit_start_date
+      - 居住证有效期起始日期
+      - origin_administrative_division
+      - 户籍或来源地行政区划
+      - social_relationship_type
+      - 社会关系类型
+      - message_status
+      - 推送数据状态
+      - task_dispatch_tag
+      - 下发任务标识
+      - residential_status
+      - 人口居住状态
+      - occupation_name
+      - 职业名称
+      - principal_name
+      - 公司负责人姓名
+      - profession
+      - 专业
+      - issue_date
+      - 证件签发日期
+      - destination_administrative_division
+      - 去往行政区划
+      - visit_reason_type
+      - 走访原因类型
+      - community_official_name
+      - 社区干部姓名
+      - special_population_category
+      - 特殊人群类别
+      - disability_level
+      - 伤残级别
+      - housing_ownership_type
+      - 房屋产权类型
+      - social_security_card_number
+      - 社保卡号
+      - spouse_travel_together
+      - 是否夫妻同行
+      - labor_union_membership
+      - 工会会员身份
+      - administrative_division_code_4digit
+      - 四位行政区划代码
+      - community_committee_code
+      - 社区居委会代码
+      - subsistence_allowance_status
+      - 低保状态
+      - relationship_type_with_visit_target
+      - 与走访对象的关系类型
+      - population_category
+      - 人口类别
+      - operating_vehicle_count
+      - 运营车辆数
+      - has_accompanying_vehicle
+      - 有无随行车辆
+      - floating_population_id
+      - 流动人口编号
+      - residence_urban_rural_classification_code
+      - 户籍地址城乡分类代码
+      - cancellation_person
+      - 注销人
+      - number_of_children
+      - 子女数量
+      - residence_permit_status
+      - 居住证状态
+      - professional_skill_code
+      - 专业技能代码
+      - id_photo_storage_path
+      - 身份证照片保存路径
+      - id_document_capture_method
+      - 证件采集方式
+      - fingerprint_match_result
+      - 指纹比对结果
+      - disposal_measures
+      - 处置措施
+      - disposal_measure_name
+      - 处置措施名称
+      - face_match_score
+      - 面部比对分数
+      - isp_code
+      - 运营商代码
+      - id_card_expiry_date
+      - 身份证有效期截止日期
+      - comparison_result
+      - 比对结果
+      - vehicle_id
+      - 交通工具编号
+      - ticket_type
+      - 车票类型
+      - face_image_storage_path
+      - 人脸图像存储路径
+      - id_card_photo_path
+      - 身份证照片存储路径
+      - id_card_fingerprint_flag
+      - 身份证是否含指纹信息标识
+      - alarm_name_flag
+      - 是否报警名称标识
+      - has_fingerprint
+      - 是否有指纹信息
+      - data_issue_type
+      - site_code
+      - 站点编号
+      - fingerprint_id
+      - 指纹编号
+      - agent_id
+      - 代理人代号
+      - booking_status
+      - 航班订票状态
+      - traveler_id_type_name
+      - 旅客证件类型名称
+      - ticket_status_name
+      - 客票状态名称
+      - previous_payment_base
+      - 变更前缴费基数
+      - household_register_number
+      - 户口簿编号
+      - benefit_item_code
+      - 待遇项目代码
+      - benefit_end_date
+      - 待遇享受终止日期
+      - affiliated_subcenter_name
+      - 所属分中心名称
+      - insurance_organization_code
+      - 参保所属机构代码
+      - industry_risk_category
+      - 行业风险类别
+      - disability_code
+      - 伤残编号
+      - certificate_issue_date
+      - 证件发证日期
+      - salary_category_name
+      - 工资类别名称
+      - household_registration_location
+      - 户口所在地
+      - industry_code
+      - 行业代码
+      - account_processing_flag
+      - 账户处理标志
+      - health_status
+      - 健康状况
+      - contribution_base
+      - 缴费基数
+      - department_id
+      - 部门ID
+      - rule_parameter_id
+      - 基数核定规则参数ID
+      - benefit_determination_period
+      - 待遇核定年月
+      - dependent_support_flag
+      - 供养亲属标识
+      - max_issue_period
+      - 个人最大发放期号
+      - benefit_item_detail_id
+      - 人员定期待遇项目明细ID
+      - contribution_rule_type_id
+      - 征缴规则类型ID
+      - social_insurance_agency
+      - 社保经办机构
+      - benefit_start_time
+      - 待遇享受开始时间
+      - retirement_status
+      - 退休状态
+      - compensation_info_id
+      - 抚恤信息编号
+      - payment_type_name
+      - 应缴类型名称
+      - relocation_status
+      - 异地安置标识
+      - bank_category_name
+      - 银行类别名称
+      - bank_account_number
+      - 银行账号
+      - id_type_name
+      - identifier
+      - 标识
+      - bed_no
+      - 床位号
+      - etl_time
+      - ETL入库时间
+      - photo_comparison_flag
+      - 照片比对标识
+      - household_registration_district_name
+      - 户籍区划名称
+      - booker_mobile
+      - 预定人手机号
+      - operator_mobile
+      - 操作人联系电话
+      - room_number
+      - 房间号
+      - is_verified
+      - 是否核查
+      - enterprise_contact_phone
+      - 企业联系电话
+      - check_in_reason
+      - 入住原因
+      - religion_code
+      - 宗教信仰代码
+      - transmission_flag
+      - 传送标识
+      - legal_representative
+      - 企业法人
+      - host_person
+      - 接待人
+      - visa_documents
+      - 签证资料
+      - stay_reason_code
+      - 停留事由代码
+      - stay_duration_days
+      - 停留天数
+      - industry_type
+      - 行业类型
+      - occupation_code
+      - 职业代码
+      - region_name
+      - 区县名称
+      - work_basis_recorder
+      - 工作依据录入人
+      - case_closure_method
+      - 结案方式
+      - filing_unit_code
+      - 立案单位代码
+      - residence_type_code
+      - 居住类型代码
+      - union_membership_status
+      - 工会会员身份状态
+      - employment_summary
+      - 就业简要情况
+      - residence_permit_valid_from
+      - residence_permit_validity_period_code
+      - 居住证有效期限代码
+      - labor_contract_type
+      - 劳动合同类型
+      - residence_mobility_area
+      - 流动区域
+      - population_collection_flag
+      - 人口采集标识
+      - population_management_category
+      - 人口管理类别
+      - residence_duration_code
+      - 居住期限代码
+      - cancellation_category
+      - 注销类别
+      - specialty_code
+      - 专长代码
+      - review_opinion
+      - 审核意见
+      - review_status
+      - 审核状态
+      - vehicle_presence_option
+      - 随行车辆有无选项
+      - special_professional_skill_code
+      - 特殊职业技能代码
+      - accompanying_person_count_code
+      - 携行人员人数代码
+      - accompanying_children_count_code
+      - 携行子女人数代码
+      - householder_relationship
+      - 与户主关系
+      - urban_rural_classification_code
+      - 城乡分类代码
+      - residence_reason_code
+      - 暂（居）住事由代码
+      - residence_duration_days
+      - 暂住天数
+      - data_status_flag
+      - 数据状态标识
+      - data_entry_person
+      - 录入人员
+      - user_id
+      - 用户标识
+      - responsible_police_unit_code
+      - 责任民警单位编码
+      - person_education_level
+      - 人员文化程度
+      - person_inspection_status
+      - 人员检验状态
+      - person_is_deleted
+      - 人员是否删除
+      - person_detention_status
+      - 人员在押状态
+      - person_survival_status
+      - 人员生存状态
+      - person_other_notes
+      - 人员其他备注信息
+      - person_parent_id
+      - 上级人员ID
+      - person_photo_url
+      - 人员照片链接
+      - person_relation
+      - person_vocation
+      - 职业
+      - related_person_id
+      - 关联人员ID
+      - person_relation_level
+      - 人员关联级别
+      - person_organization
+      - 人员所属单位
+      - person_path
+      - 人员路径
+      - relationship_id
+      - 人员关系标识
+      - personnel_status
+      - 人员现状
+      - person_organization_affiliation
+      - 人员组织关联情况
+      - graph_id
+      - 图谱编号
+      - communication_tool
+      - 网络通信工具
+      - study_religion_method
+      - 学经方式
+      - receipt_flag
+      - 接收标志
+      - is_key_foreign_personnel
+      - submission_flag
+      - 上送标志
+      - community_code
+      - 所属社区代码
+      - foreigner_permit_id
+      - 外国人办证ID
+      - foreign_resident_business_id
+      - 常住境外人员业务ID
+      - identity_document_name
+      - 身份证明文件名称
+      - fa_dong_ji_gang_shu
+      - 发动机缸数
+      - fa_he_ge_zheng_ri_qi
+      - 发合格证日期
+      - fa_zheng_ri_qi
+      - 发证日期
+      - hou_pai_zai_ke_ren_shu
+      - 驾驶室后排载客人数
+      - nong_cun_di_qu_biao_zhi
+      - 农村地区标志
+      - shi_fou_xin_neng_yuan_che
+      - 是否新能源汽车
+      - suo_you_quan
+      - 所有权
+      - xiao_shou_jia_ge
+      - 销售价格
+      - yong_tu_shu_xing
+      - 用途属性
+      - yuan_ji_dong_che_xu_hao
+      - 原机动车序号
+      - zheng_jian_hang_shu
+      - 证件行数
+      - zhuan_xiang_xing_shi
+      - 转向形式
+      - service_location
+      - 服务处所
+      - gbbmshyj
+      - 干部编码审核意见
+      - jldt
+      - 记录日期
+      - accent
+      - 口音
+      - case_cause
+      - 案由
+      - first_instance_time
+      - 一审时间
+      - sub_case_type
+      - 副案别
+      - reporting_unit_code
+      - 发案单位编码
+      - address_doorplate
+      - 门楼牌号
+      - solving_department
+      - 破案部门
+      - case_solved_region
+      - 破案地区
+      - serial_no
+      - 序号
+      - suspect_profile_analysis
+      - 作案人情况分析
+      - group_nature
+      - 集团性质
+      - security_classification
+      - 密级
+      - case_solved_time_period
+      - accepting_unit_phone
+      - coordinate_x
+      - 坐标X值
+      - case_consolidation_opinion
+      - 串并案意见与依据
+      - crime_exit_point
+      - 作案出口
+      - suspect_count_upper_limit
+      - 作案人数上限
+      - min_suspect_count
+      - 作案人数下限
+      - transferring_unit_contact_number
+      - 移送单位联系电话
+      - has_suspect
+      - 是否有嫌疑人
+      - coordinate_z
+      - Z轴坐标
+      - number_of_perpetrators
+      - modus_operandi
+      - 作案手段
+      - payment_start_year_month
+      - 缴费开始年月
+      - business_license_issue_date
+      - 工商登记发照日期
+      - employment_start_date
+      - 劳动关系开始日期
+      - retirement_date
+      - 离退休日期
+      - survival_status
+      - 生存状态
+      - status_change_date
+      - 状态变更日期
+      - accounting_period
+      - 做账期号
+      - receiver_zip_code
+      - 收货人邮政编码
+      - goods_weight
+      - 商品重量
+      - collection_amount
+      - 代收款金额
+      - insured_value
+      - 保价金额
+      - is_cod
+      - 是否货到付款
+      - wb_remark
+      - 外部备注
+      - consignee_branch_phone
+      - 收货网点电话
+      - is_collection_on_delivery
+      - 是否代收款
+      - remark
+      - 备注
+      - case_reason
+      - lane_id
+      - 车道编号
+      - key_person_category_level3
+      - 关键人员类别三级
+      - key_person_category_level4
+      - 重点人员类别四级
+    sample_patterns: []
+    applicable_table_types:
+      - 主档
+      - 关系
+      - 事件
+      - 标签
+      - 聚合
+  - name: relationship_to_householder
+    cn_name: 与户主关系
+    logical_type: text
+    role: filter
+    description: 描述家庭成员相对于户主的身份或角色，如配偶、子女、父母等。
+    aliases:
+      - 与户主关系
+      - yu_hu_zhu_guan_xi
+      - relationship_to_householder
+      - 户内关系
+      - 家庭关系
+      - 家庭角色
+      - yu_hu_zhu_guan_xi_ming_cheng
+    sample_patterns: []
+    applicable_table_types:
+      - 主档
+      - 关系
+      - 事件
+      - 标签
+      - 聚合
+  - name: ethnicity_code
+    cn_name: 民族代码
+    logical_type: status_code
+    role: filter
+    description: 用于标识个人所属民族的标准化编码
+    aliases:
+      - 民族代码
+      - min_zu_dai_ma
+      - ethnicity_code
+      - mzdm
+      - 民族编码
+      - min_zu_bian_ma
+      - mz_bm
+      - ethnic_code
+    sample_patterns: []
+    applicable_table_types:
+      - 主档
+      - 关系
+      - 事件
+      - 标签
+      - 聚合
+  - name: household_type
+    cn_name: 户口类型
+    logical_type: text
+    role: filter
+    description: 标识个人或家庭户口的性质类别，如农业户口、非农业户口等。
+    aliases:
+      - 户口类型
+      - hu_kou_lei_xing
+      - household_type
+      - 户籍类别
+      - 户口性质
+    sample_patterns: []
+    applicable_table_types:
+      - 主档
+      - 关系
+      - 事件
+      - 标签
+      - 聚合
+  - name: management_status
+    cn_name: 管理状态
+    logical_type: status_code
+    role: filter
+    description: 标识人员在户籍或出入境等业务中的当前管理状态
+    aliases:
+      - 管理状态
+      - guan_li_zhuang_tai
+      - management_status
+      - 人员状态
+      - 户籍状态
+      - 常口管理状态
+      - glzt
+      - 户口状态
+    sample_patterns: []
+    applicable_table_types:
+      - 主档
+      - 关系
+      - 事件
+      - 标签
+      - 聚合
+  - name: occupation_category
+    cn_name: 职业类别
+    logical_type: text
+    role: filter
+    description: 用于标识主体所属的职业大类，常用于风险管控或用户分群过滤。
+    aliases:
+      - 职业类别
+      - zylb
+      - job_category
+      - occupation_type
+      - 职业大类
+    sample_patterns: []
+    applicable_table_types:
+      - 主档
+      - 标签
+      - 关系
+      - 事件
+      - 聚合
+  - name: school_name
+    cn_name: 学校名称
+    logical_type: text
+    role: display
+    description: 标识个人或机构所关联的教育机构名称，用于展示或定位学习/工作场所。
+    aliases:
+      - 学校名称
+      - xxmc
+      - school_name
+      - 就读学校
+      - 院校名称
+    sample_patterns: []
+    applicable_table_types:
+      - 主档
+      - 关系
+      - 事件
+      - 标签
+      - 聚合
+  - name: case_summary
+    cn_name: 简要案情
+    logical_type: text
+    role: description
+    description: 对案事件或工单核心内容的简明概括，用于快速了解事件要点
+    aliases:
+      - 简要案情
+      - jyaq
+      - 案情摘要
+      - 案件简述
+      - 工单标题
+      - 诉求摘要
+      - 事件简述
+      - case_title
+      - gd_title
+      - summary_text
+    sample_patterns: []
+    applicable_table_types:
+      - 主档
+      - 事件
+      - 关系
+      - 标签
+      - 聚合
+  - name: exit_entry_direction
+    cn_name: 出入境方向
+    logical_type: text
+    role: filter
+    description: 标识人员或交通工具的出入境行为方向，如出境、入境或过境。
+    aliases:
+      - 出入境标识
+      - 出入国境方向
+      - chu_ru_jing_biao_shi
+      - 出境入境方向
+      - 进出境类型
+    sample_patterns: []
+    applicable_table_types:
+      - 主档
+      - 关系
+      - 事件
+      - 标签
+      - 聚合
+  - name: app_name
+    cn_name: 应用名称
+    logical_type: text
+    role: filter
+    description: 标识移动或网络应用的名称，用于筛选或识别特定应用程序。
+    aliases:
+      - 应用名
+      - 小众应用名称
+      - appname
+      - ying_yong_ming
+    sample_patterns: []
+    applicable_table_types:
+      - 主档
+      - 关系
+      - 事件
+      - 标签
+      - 聚合
+  - name: capture_time
+    cn_name: 采集时间
+    logical_type: datetime
+    role: time
+    description: 记录信息或事件被系统捕获或采集的具体时间点。
+    aliases:
+      - 发生时间
+      - 登记时间
+      - 信息采集时间
+      - capture_time
+      - djsj
+      - 截获时间
+      - 上线时间
+      - cj_sj
+    sample_patterns: []
+    applicable_table_types:
+      - 主档
+      - 关系
+      - 事件
+      - 标签
+      - 聚合
+  - name: online_account
+    cn_name: 网络账号
+    logical_type: text
+    role: subject_id
+    description: 多个字段表示同一类信息（网络账号），合并为一个槽位，属于人员标识类但 base 中无对应概念。
+    aliases:
+      - 网络账号
+      - wlzh
+      - 网号
+      - 互联网账号
+      - 社交账号
+    sample_patterns: []
+    applicable_table_types:
+      - 主档
+  - name: bank_card_no
+    cn_name: 银行卡号
+    logical_type: text
+    role: subject_id
+    description: 虽含敏感信息，但作为人员关联标识在公安场景有治理价值，base 中无银行卡号槽位，需新建。
+    aliases:
+      - 银行卡号
+      - yhkh
+      - 银行账号
+      - 储蓄卡号
+      - 借记卡号
+    sample_patterns: []
+    applicable_table_types:
+      - 主档
+  - name: organization_name
+    cn_name: 机构名称
+    logical_type: text
+    role: display
+    description: ‘反恐部门名称’属于机构/组织名称，base 中无对应 display 类机构名称槽位（organization_id 是 ID），需新建 extended 槽位。
+    aliases:
+      - 机构名称
+      - 部门名称
+      - 单位名称
+      - 反恐部门名称
+      - 派出所名称
+    sample_patterns: []
+    applicable_table_types:
+      - 主档
+  - name: military_service_status
+    cn_name: 兵役状况
+    logical_type: status_code
+    role: filter
+    description: ‘兵役状况名称’如‘未服兵役’‘退出现役’是标准人口属性，base 中无对应槽位，需新建 filter 类 extended 槽位。
+    aliases:
+      - 兵役状况
+      - byzkmc
+      - 服役状态
+      - 兵役状态
+      - 服兵役情况
+    sample_patterns: []
+    applicable_table_types:
+      - 主档

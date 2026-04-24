@@ -1,0 +1,8 @@
+pandas>=1.5
+numpy>=1.23
+scikit-learn>=1.3  # HDBSCAN requires sklearn >= 1.3
+pyyaml>=6.0
+ruamel.yaml>=0.17  # preserve comments when writing base_slots.yaml
+openai>=1.30
+python-dotenv>=1.0
+tenacity>=8.2
